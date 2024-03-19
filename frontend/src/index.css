@@ -55,3 +55,27 @@ button {
   padding: 10px;
   border-radius: 10px;
 }
+
+/* Main Home Page CSS */
+
+.bowling-frames {
+  border: 2px solid blue;
+  padding: 10px;
+  max-height: 400px;
+}
+
+.indi-frame {
+  border: 2px solid green;
+  padding: 10px;
+  display: flex;
+  max-height: 200px;
+}
+
+#frame1 {
+  border: 3px solid darkgray;
+  padding: 5px;
+  height: 110px;
+  width: 110px;
+  display: flex;
+  flex-wrap: wrap;
+}
