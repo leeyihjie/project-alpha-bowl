@@ -14,8 +14,12 @@ const WelcomePage = () => {
         </p>
       </div>
       <div className="WelcomeBody">
-        <button>Login</button>
-        <button>Register</button>
+        <Link to="/login">
+          <button>Login</button>
+        </Link>
+        <Link to="/register">
+          <button>Register</button>
+        </Link>
       </div>
       <div className="Footer">
         <div>

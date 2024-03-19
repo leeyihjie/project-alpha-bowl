@@ -53,7 +53,7 @@ const LoginPage = () => {
             required
           />
         </label>
-        {/* <br /> */}
+        <br />
         <label>
           Password:
           <input
@@ -65,7 +65,7 @@ const LoginPage = () => {
             required
           />
         </label>
-        {/* <br /> */}
+        <br />
         <button type="button" onClick={loginSubmit}>
           Login
         </button>
