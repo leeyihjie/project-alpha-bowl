@@ -1,19 +1,16 @@
-import React from "react";
 import React, { useContext } from "react";
 import { useState, useEffect } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 
-import API from "../API/axiosAPI"
+import API from "../API/axiosAPI";
 
 const LoginPage = () => {
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  // To be used to display whatever error to user when logging in. 
+  // To be used to display whatever error to user when logging in.
   // Input this as a seperate <div>
-  const [error, setError] = useState(""); 
-
+  const [error, setError] = useState("");
 
   // login function when login button is clicked.
   // takes input username and password and sends it as a JSON object
@@ -35,11 +32,10 @@ const LoginPage = () => {
       // Response is the response body returned by the backend
       // after validating the submitted login data by the user
       const response = await API.post("/login", authData);
-
-
+    } catch (err) {
+      console.log("Error: ", err);
     }
-  }
-
+  };
 
   return (
     <div className="loginForm">
@@ -70,7 +66,9 @@ const LoginPage = () => {
           />
         </label>
         {/* <br /> */}
-        <button type="button" onClick={loginSubmit}>Login</button>
+        <button type="button" onClick={loginSubmit}>
+          Login
+        </button>
       </form>
     </div>
   );
