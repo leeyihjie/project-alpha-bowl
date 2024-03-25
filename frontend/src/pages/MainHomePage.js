@@ -1,10 +1,34 @@
 import React from "react";
 import Box from "@mui/material/Box";
+import { useState } from "react";
 
 const MainHomePage = () => {
-  const getFrameScore = () => {
-    const firstBallScore = document.getElementById("firstBall").value;
-    const secondBallScore = document.getElementById("secondBall").value;
+  const [f1score, setf1score] = useState("");
+  const [f2score, setf2score] = useState("");
+  const [totalscore, settotalscore] = useState("");
+
+  const displayf1Score = (score) => {
+    if (score == "") {
+      setf1score(score);
+    } else if (parseInt(score) >= 0 && parseInt(score) <= 10) {
+      setf1score(parseInt(score));
+    } else {
+      alert("Input a score only between 0 to 10");
+    }
+  };
+  const displayf2Score = (score) => {
+    if (score == "") {
+      setf2score(score);
+    } else if (parseInt(score) >= 0 && parseInt(score) <= 10 - f1score) {
+      setf2score(parseInt(score));
+    } else {
+      alert(`Input a score only between 0 to ${10 - f1score}`);
+    }
+  };
+
+  const displayTotalScore = (f1score, f2score) => {
+    var totalScore = f1score + f2score;
+    return <div>{totalScore}</div>;
   };
 
   return (
@@ -21,13 +45,27 @@ const MainHomePage = () => {
             <div className="frameNoBox">Frame 1</div>
             <div className="middleScoreBox">
               <div className="indiv-scores" id="firstBall">
-                <input> </input>
+                <input
+                  className="inputScores"
+                  type="number"
+                  id="frame1-1"
+                  value={f1score}
+                  onChange={(event) => displayf1Score(event.target.value)}
+                ></input>
               </div>
               <div className="indiv-scores" id="secondBall">
-                7
+                <input
+                  className="inputScores"
+                  type="number"
+                  id="frame1-2"
+                  value={f2score}
+                  onChange={(event) => displayf2Score(event.target.value)}
+                ></input>
               </div>
             </div>
-            <div className="totalFrameScoreBox">9</div>
+            <div className="totalFrameScoreBox">
+              {displayTotalScore(f1score, f2score)}
+            </div>
           </div>
           <div className="frameBox" id="fno2">
             <div className="frameNoBox">Frame 2</div>

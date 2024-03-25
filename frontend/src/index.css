@@ -137,3 +137,15 @@ button {
   align-items: center;
   justify-content: center;
 }
+
+.inputScores {
+  width: 80%;
+  height: 80%;
+  background-color: lightgray;
+  border: 0;
+}
+
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
