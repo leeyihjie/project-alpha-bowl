@@ -58,51 +58,43 @@ const MainHomePage = () => {
   //   }
   // };
 
-  const setf1 = (event, updateScore) => {
-    const score = event.target.value;
-    if (score == "") {
-      updateScore(score);
-    } else if (parseInt(score) >= 0 && parseInt(score) <= 10) {
-      updateScore(parseInt(score));
+  const setb1 = (event, updateScoreb1, updateScoreb2) => {
+    const b1score = event.target.value;
+    if (b1score == "") {
+    } else if (parseInt(b1score) >= 0 && parseInt(b1score) <= 9) {
+      updateScoreb1(parseInt(b1score));
+      updateScoreb2("");
+    } else if (parseInt(b1score) == 10) {
+      updateScoreb1("");
+      updateScoreb2("X");
     } else {
       alert("Input a score only between 0 to 10");
     }
   };
 
-  const displayb2scoref = (b2scoref) => {
-    if (b2scoref == 0) {
-    }
-  };
-
-  // const setf2 = (score, id) => {
-  //   if (score == "") {
-  //     window[`setb2scoref${id}`](score);
-  //   } else if (parseInt(score) >= 0 && parseInt(score) <= 10 - `b2scoref${id}`) {
-  //     window[`setb2scoref${id}`](parseInt(score));
-  //   } else {
-  //     alert(`Input a score only between 0 to ${10 - `b2scoref${id}`}`);
-  //   }
-  // };
-
-  const setf2 = (event, updateScore, b2scoref, updateTotal) => {
-    const score = event.target.value;
-    if (score == "") {
-      updateScore(score);
-    } else if (parseInt(score) >= 0 && parseInt(score) <= 10 - b2scoref) {
-      updateScore(parseInt(score));
+  const setb2 = (
+    event,
+    updateScoreb1,
+    updateScoreb2,
+    updateTotalf1,
+    b1score
+  ) => {
+    const b2score = event.target.value;
+    if (b2score == "") {
+    } else if (parseInt(b2score) >= 0 && parseInt(b2score) <= 9 - b1score) {
+      updateScoreb2(parseInt(b2score));
+      updateTotalf1(b1score + parseInt(b2score));
+    } else if (parseInt(b2score) + b1score == 10) {
+      updateScoreb2("/");
+      updateTotalf1("");
     } else {
-      alert(`Input a score only between 0 to ${10 - b2scoref}`);
+      alert(`Input a score only between 0 to ${10 - b1score}`);
+      updateScoreb2("");
     }
-
-    updateTotal(parseInt(score) + b2scoref);
   };
 
   const displayTotalScore = (totalscore) => {
-    if (totalscore != 10) {
-      return <div>{totalscore}</div>;
-    } else {
-      return <div>{totalscore}</div>;
-    }
+    return <div>{totalscore}</div>;
   };
 
   return (
@@ -121,20 +113,26 @@ const MainHomePage = () => {
               <div className="indiv-scores" id="firstBall">
                 <input
                   className="inputScores"
-                  type="number"
+                  type="text"
                   id="frame1-1"
                   value={b1scoref1}
-                  onChange={(event) => setf1(event, setb1scoref1)}
+                  onChange={(event) => setb1(event, setb1scoref1, setb2scoref1)}
                 ></input>
               </div>
               <div className="indiv-scores" id="secondBall">
                 <input
                   className="inputScores"
-                  type="number"
+                  type="text"
                   id="frame1-2"
                   value={b2scoref1}
                   onChange={(event) =>
-                    setf2(event, setb2scoref1, b1scoref1, setscoretotalf1)
+                    setb2(
+                      event,
+                      setb1scoref1,
+                      setb2scoref1,
+                      setscoretotalf1,
+                      b1scoref1
+                    )
                   }
                 ></input>
               </div>
@@ -149,20 +147,20 @@ const MainHomePage = () => {
               <div className="indiv-scores" id="firstBall">
                 <input
                   className="inputScores"
-                  type="number"
+                  type="text"
                   id="frame2-1"
                   value={b1scoref2}
-                  onChange={(event) => setf1(event, setb1scoref2)}
+                  onChange={(event) => setb1(event, setb1scoref2)}
                 ></input>
               </div>
               <div className="indiv-scores" id="secondBall">
                 <input
                   className="inputScores"
-                  type="number"
+                  type="text"
                   id="frame2-2"
                   value={b2scoref2}
                   onChange={(event) =>
-                    setf2(event, setb2scoref2, b1scoref2, setscoretotalf2)
+                    setb2(event, setb2scoref2, b1scoref2, setscoretotalf2)
                   }
                 ></input>
               </div>
