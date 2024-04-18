@@ -1,11 +1,9 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import { Box, Button } from "@mui/material";
 import { useState } from "react";
 
 const MainHomePage = () => {
-  const [b1scoref1, setb1scoref1] = useState("");
-  const [b2scoref1, setb2scoref1] = useState("");
-  const [scoretotalf1, setscoretotalf1] = useState("");
+  // Component for Frame
 
   const [b1scoref2, setb1scoref2] = useState("");
   const [b2scoref2, setb2scoref2] = useState("");
@@ -93,8 +91,109 @@ const MainHomePage = () => {
     }
   };
 
-  const displayTotalScore = (totalscore) => {
-    return <div>{totalscore}</div>;
+  // FOR FRAME 1
+  const [frame1Score, setframe1Score] = useState({
+    active: "",
+    firstBallScore: "",
+    secondBallScore: "",
+    totalScore: "",
+  });
+
+  // Function to handle input change
+  const handleInputFrame1 = (e) => {
+    console.log("name:" + e.target.name);
+    console.log("value" + e.target.value);
+    console.log("is active:" + isActive);
+    var f1score = e.target.value;
+
+    var b1score = 0;
+    var b2score = 0;
+
+    if (e.target.name == "firstBallScore") {
+      var b1score = f1score;
+
+      if (b1score == "") {
+        var totalscore = "";
+      } else {
+        var b1score = parseInt(f1score);
+      }
+
+      if (frame1Score.secondBallScore == "") {
+        var totalscore = b1score + 0;
+      } else {
+        var totalscore = b1score + parseInt(frame1Score.secondBallScore);
+      }
+    } else if (e.target.name == "secondBallScore") {
+      if (frame1Score.firstBallScore == "") {
+        alert("Please fill in first ball throw first");
+        f1score = "";
+        var totalscore = "";
+      } else {
+        var b2score = parseInt(f1score);
+        var totalscore = parseInt(frame1Score.firstBallScore) + b2score;
+      }
+    }
+
+    if (totalscore)
+      setframe1Score({
+        ...frame1Score,
+        active: isActive,
+        [e.target.name]: f1score,
+        ["totalScore"]: totalscore,
+      });
+  };
+
+  // Single useState hook to update input values as an obj
+  const [scoreState, setScoreState] = useState({
+    active: "",
+    frameNo: "",
+    firstBallScore: "",
+    secondBallScore: "",
+  });
+
+  // Function to handle input change
+  const handleInputChange = (e) => {
+    console.log(e.target.id);
+    console.log(e.target.value);
+    console.log(isActive);
+    const score = e.target.value;
+
+    setScoreState({
+      active: isActive,
+      [e.target.name]: score,
+    });
+  };
+
+  const updateTotalScore = (frameno) => {};
+
+  const displayTotalScore = () => {
+    return <div>{frame1Score.totalScore}</div>;
+  };
+
+  const myframeList = [
+    { id: "Frame2", text: "Frame 2" },
+    { id: "Frame3", text: "Frame 3" },
+    { id: "Frame4", text: "Frame 4" },
+    { id: "Frame5", text: "Frame 5" },
+    { id: "Frame6", text: "Frame 6" },
+    { id: "Frame7", text: "Frame 7" },
+    { id: "Frame8", text: "Frame 8" },
+    { id: "Frame9", text: "Frame 9" },
+  ];
+
+  // State for Currently Selected Frame
+  const [isActive, setIsActive] = useState("");
+
+  // Function to Update Current Frame Number on Click and Highlight
+  // Current State
+
+  const highlightCurrFrame = (frameid) => {
+    // set currFrameNo to currently selected Frame
+    setIsActive(frameid);
+
+    // Return set Div to change background colour
+    // const currFrameDiv = document.getElementById(currFrameNo);
+    // currFrameDiv.style.backgroundColor = "white";
   };
 
   return (
@@ -107,16 +206,30 @@ const MainHomePage = () => {
       </div>
       <div className="bowling-frames">
         <div className="indiv-frame">
-          <div className="frameBox" id="fno1">
-            <div className="frameNoBox">Frame 1</div>
+          <div
+            className={
+              "frameBox " +
+              (isActive === "Frame1" ? "activeFrameBox" : "inactiveFrameBox")
+            }
+            id="Frame1"
+          >
+            <div className="frameNoBox">
+              <Button
+                variant="text"
+                onClick={() => highlightCurrFrame("Frame1")}
+              >
+                Frame 1
+              </Button>
+            </div>
             <div className="middleScoreBox">
               <div className="indiv-scores" id="firstBall">
                 <input
                   className="inputScores"
                   type="text"
                   id="frame1-1"
-                  value={b1scoref1}
-                  onChange={(event) => setb1(event, setb1scoref1, setb2scoref1)}
+                  name="firstBallScore"
+                  value={frame1Score.firstBallScore}
+                  onChange={handleInputFrame1}
                 ></input>
               </div>
               <div className="indiv-scores" id="secondBall">
@@ -124,24 +237,48 @@ const MainHomePage = () => {
                   className="inputScores"
                   type="text"
                   id="frame1-2"
-                  value={b2scoref1}
-                  onChange={(event) =>
-                    setb2(
-                      event,
-                      setb1scoref1,
-                      setb2scoref1,
-                      setscoretotalf1,
-                      b1scoref1
-                    )
-                  }
+                  name="secondBallScore"
+                  value={frame1Score.secondBallScore}
+                  onChange={handleInputFrame1}
                 ></input>
               </div>
             </div>
-            <div className="totalFrameScoreBox">
-              {displayTotalScore(scoretotalf1)}
-            </div>
+            <div className="totalFrameScoreBox">{displayTotalScore()}</div>
           </div>
-          <div className="frameBox" id="fno2">
+          {myframeList.map((f, index) => (
+            <div
+              className={
+                "frameBox " +
+                (isActive === f.id ? "activeFrameBox" : "inactiveFrameBox")
+              }
+              id={f.id}
+            >
+              <div className="frameNoBox">
+                <Button variant="text" onClick={() => highlightCurrFrame(f.id)}>
+                  {f.text}
+                </Button>
+              </div>
+              <div className="middleScoreBox">
+                <div
+                  className="indiv-scores"
+                  type="text"
+                  id={isActive + "-1"}
+                  name="firstBallScore"
+                  value={scoreState.firstBallScore}
+                  onChange={handleInputChange}
+                >
+                  <input className="inputScores" id></input>
+                </div>
+                <div className="indiv-scores" type="text" id={isActive + "-2"}>
+                  <input className="inputScores"></input>
+                </div>
+              </div>
+              <div className="totalFrameScoreBox">
+                {/* {displayTotalScore(scoretotalf1)} */}
+              </div>
+            </div>
+          ))}
+          <div className={"frameBox "} id="2">
             <div className="frameNoBox">Frame 2</div>
             <div className="middleScoreBox">
               <div className="indiv-scores" id="firstBall">
@@ -165,32 +302,30 @@ const MainHomePage = () => {
                 ></input>
               </div>
             </div>
-            <div className="totalFrameScoreBox">
-              {displayTotalScore(scoretotalf2)}
-            </div>
+            <div className="totalFrameScoreBox">{}</div>
           </div>
-          <div className="frameBox" id="fno3">
+          {/* <div className="frameBox" id="3">
             <div className="frameNoBox">Frame 3</div>
           </div>
-          <div className="frameBox" id="fno4">
+          <div className="frameBox" id="4">
             <div className="frameNoBox">Frame 4</div>
           </div>
-          <div className="frameBox" id="fno5">
+          <div className="frameBox" id="5">
             <div className="frameNoBox">Frame 5</div>
           </div>
-          <div className="frameBox" id="fno6">
+          <div className="frameBox" id="6">
             <div className="frameNoBox">Frame 6</div>
           </div>
-          <div className="frameBox" id="fno7">
+          <div className="frameBox" id="7">
             <div className="frameNoBox">Frame 7</div>
           </div>
-          <div className="frameBox" id="fno8">
+          <div className="frameBox" id="8">
             <div className="frameNoBox">Frame 8</div>
           </div>
-          <div className="frameBox" id="fno9">
+          <div className="frameBox" id="9">
             <div className="frameNoBox">Frame 9</div>
-          </div>
-          <div className="frameBox" id="fno10">
+          </div> */}
+          <div className="frameBox" id="10">
             <div className="frameNoBox">Frame 10</div>
           </div>
           <div className="frameBox" id="fnoHCP">

@@ -101,6 +101,10 @@ button {
   font-weight: bold;
 }
 
+.activeFrameBox {
+  background-color: white;
+}
+
 .frameNoBox {
   border-bottom: 3px solid black;
   align-items: center;
