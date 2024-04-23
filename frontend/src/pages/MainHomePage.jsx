@@ -4,89 +4,6 @@ import { useState, useEffect } from "react";
 import { ScrollRestoration } from "react-router-dom";
 
 const MainHomePage = () => {
-  // Function to handle input change
-  // const handleInputFrame1 = (e) => {
-  //   // input score value
-
-  //   var currB1score = scoreState1.firstBallScore;
-  //   var currScore = "";
-  //   var currScore2 = "";
-  //   var storedFrameScore = "";
-  //   var totalScore = "";
-
-  //   if (e.target.name == "firstBallScore") {
-  //     currScore = e.target.value;
-
-  //     if (parseInt(currScore) > 9 || parseInt(currScore) < 0) {
-  //       alert(
-  //         "Please only input a score between 0 to 9 or x/X if you get a Strike"
-  //       );
-  //       currScore = "";
-  //     }
-
-  //     if (currScore == "X" || currScore == "x") {
-  //       currScore = "";
-  //       currScore2 = "X";
-  //       storedFrameScore = "10";
-  //       totalScore = 10;
-  //     }
-  //     setScoreState1({
-  //       ...scoreState1,
-  //       ["firstBallScore"]: currScore,
-  //       ["secondBallScore"]: currScore2,
-  //       ["frameTotalScore"]: storedFrameScore,
-  //       ["gameTotalScore"]: totalScore,
-  //     });
-  //   } else if (e.target.name == "secondBallScore") {
-  //     currScore = e.target.value;
-  //     if (currB1score == "") {
-  //       alert("Please input a score for the first throw first");
-  //       currScore = "";
-  //     } else {
-  //       if (parseInt(currScore) + parseInt(currB1score) > 10) {
-  //         alert(`Input a score only between 0 to ${10 - currB1score}`);
-  //         currScore = "";
-  //       }
-  //     }
-  //     if (currB1score < 10) {
-  //       if (currScore == "/") {
-  //         currScore2 = "";
-  //         currScore = "/";
-  //         storedFrameScore = "10";
-  //         totalScore = 10;
-  //       } else {
-  //         storedFrameScore = parseInt(currB1score) + parseInt(currScore);
-  //         totalScore = storedFrameScore;
-  //       }
-  //     }
-  //     setScoreState1({
-  //       ...scoreState1,
-  //       ["secondBallScore"]: currScore,
-  //       ["frameTotalScore"]: storedFrameScore,
-  //       ["gameTotalScore"]: totalScore,
-  //     });
-  //   }
-  // };
-
-  // Update total score for frame 1
-  // const displayScore1 = () => {
-  //   var displayedScore = "";
-  //   var B1Score = scoreState1.firstBallScore;
-  //   var B2Score = scoreState1.secondBallScore;
-
-  //   if (B2Score == "X") {
-  //     displayedScore = "10";
-  //   } else if (B2Score == "/") {
-  //     displayedScore = "10";
-  //   } else if (B1Score < 10 && B2Score == "") {
-  //     displayedScore = "";
-  //   } else if (B1Score < 10 && B2Score != "") {
-  //     displayedScore = parseInt(B1Score) + parseInt(B2Score);
-  //   }
-
-  //   return <div>{scoreState1.gameTotalScore}</div>;
-  // };
-
   // Single useState hook to update input values as an obj for frames 1-9
   const [scoreState, setScoreState] = useState([
     {
@@ -163,6 +80,213 @@ const MainHomePage = () => {
     },
   ]);
 
+  const [scoreState10, setScoreState10] = useState({
+    key: 10,
+    text: "Frame 10",
+    firstBallScore: "",
+    secondBallScore: "",
+    thirdBallScore: "",
+    frameTotalScore: "",
+    gameTotalScore: "",
+  });
+
+  // Function to update values for Special Frame 10
+  const updateFrameStates10 = (e) => {
+    const { name, value, id } = e.target;
+
+    var currB1score = scoreState10.firstBallScore;
+    var currB2score = scoreState10.secondBallScore;
+    var currB3score = scoreState10.thirdBallScore;
+
+    var score = value;
+    var currScore = "";
+    var otherBallScore = "";
+    var otherBallScore2 = "";
+    var storedFrameScore = "";
+
+    if (name == "firstBallScore") {
+      if (score > 9 || score < 0) {
+        alert(
+          "Please only input a score between 0 to 9 or x/X if you get a Strike"
+        );
+      }
+      if (score == "x" || score == "X") {
+        currScore = "X";
+        storedFrameScore = "10";
+      } else if (score < 10 && currB2score == "") {
+        currScore = score;
+        storedFrameScore = currScore;
+      }
+      setScoreState10({
+        ...scoreState10,
+        ["firstBallScore"]: currScore,
+        ["secondBallScore"]: otherBallScore,
+        ["thirdBallScore"]: otherBallScore2,
+        ["frameTotalScore"]: storedFrameScore,
+      });
+    } else if (name == "secondBallScore") {
+      console.log("bb" + currB1score);
+      if (currB1score == "") {
+        alert("Please input a score for the first throw first");
+      } else {
+        if (currB1score == "X") {
+          if (parseInt(score) > 9) {
+            alert(
+              "Input a score only between 0 to 9 or x/X if you get a Strike"
+            );
+          } else if (score == "x" || score == "X") {
+            currScore = "X";
+            otherBallScore = currB1score;
+            storedFrameScore = parseInt(scoreState10.frameTotalScore) + 10;
+          } else {
+            currScore = score;
+            otherBallScore = currB1score;
+            storedFrameScore =
+              parseInt(scoreState10.storedFrameScore) + parseInt(score);
+          }
+        } else {
+          if (parseInt(score) + parseInt(currB1score) > 9) {
+            alert(
+              `Input a score only between 0 to ${
+                9 - currB1score
+              }. Input "/" if you get a spare.`
+            );
+          } else if (score == "/") {
+            currScore = score;
+            otherBallScore = currB1score;
+            storedFrameScore = "10";
+          } else {
+            currScore = score;
+            otherBallScore = currB1score;
+            storedFrameScore =
+              parseInt(scoreState10.firstBallScore) + parseInt(score);
+          }
+        }
+        setScoreState10({
+          ...scoreState10,
+          ["firstBallScore"]: otherBallScore,
+          ["secondBallScore"]: currScore,
+          ["thirdBallScore"]: otherBallScore2,
+          ["frameTotalScore"]: storedFrameScore,
+        });
+      }
+    } else if (name == "thirdBallScore") {
+      if (currB1score == "" || currB2score == "") {
+        alert("Please input a score for the first and second throw first");
+      } else if (currB2score == "X" || currB2score == "/") {
+        if (parseInt(score) > 9 || parseInt(score) < 0) {
+          alert("Input a score only between 0 to 9 or x/X if you get a Strike");
+        } else if (score == "x" || score == "X") {
+          currScore = "X";
+          otherBallScore = currB1score;
+          otherBallScore2 = currB2score;
+          storedFrameScore = parseInt(scoreState10.frameTotalScore) + 10;
+        } else {
+          currScore = score;
+          otherBallScore = currB1score;
+          otherBallScore2 = currB2score;
+          storedFrameScore =
+            parseInt(scoreState10.frameTotalScore) + parseInt(score);
+        }
+      } else {
+        if (parseInt(score) + parseInt(currB2score) > 9) {
+          alert(
+            `Input a score only between 0 to ${
+              9 - currB2score
+            }. Input "/" if you get a spare.`
+          );
+        } else if (score == "/") {
+          currScore = score;
+          otherBallScore = currB1score;
+          otherBallScore2 = currB2score;
+          storedFrameScore =
+            parseInt(scoreState10.frameTotalScore) +
+            (10 - parseInt(scoreState10.secondBallScore));
+        } else {
+          currScore = score;
+          otherBallScore = currB1score;
+          storedFrameScore =
+            parseInt(scoreState10.frameTotalScore) + parseInt(score);
+        }
+      }
+      setScoreState10({
+        ...scoreState10,
+        ["firstBallScore"]: otherBallScore,
+        ["secondBallScore"]: otherBallScore2,
+        ["thirdBallScore"]: currScore,
+        ["frameTotalScore"]: storedFrameScore,
+      });
+    }
+
+    const list = [...scoreState];
+
+    // Update Displayed Total Score
+    // if (list[8].secondBallScore != "") {
+    // Case 1: Past 2 Frames were Strikes (XX)
+    if (list[8].secondBallScore == "X" && list[9].secondBallScore == "X") {
+      // Update past 2nd frame totalscore
+      var updatedPrev2ndFrameScore = // 30 for frame 1
+        parseInt(list[index - 2].gameTotalScore) +
+        parseInt(list[index].frameTotalScore);
+
+      // Update past frame totalscore
+      var updatedPrevFrameScore =
+        parseInt(updatedPrev2ndFrameScore) + // 30
+        parseInt(list[index - 1].frameTotalScore) + // 10
+        parseInt(list[index].frameTotalScore); // 10
+
+      // Update current frame total score
+      var updatedCurrFrameScore =
+        parseInt(updatedPrevFrameScore) + // 50
+        parseInt(list[index].frameTotalScore);
+      // Update past 2nd frame totalscore state
+      list[index - 2] = {
+        ...list[index - 2],
+        ["gameTotalScore"]: updatedPrev2ndFrameScore,
+      };
+
+      // Update past frame totalscore state
+      list[index - 1] = {
+        ...list[index - 1],
+        ["gameTotalScore"]: updatedPrevFrameScore,
+      };
+
+      // Update current frame totalscore state
+      list[index] = {
+        ...list[index],
+        ["gameTotalScore"]: updatedCurrFrameScore,
+      };
+
+      setScoreState(list);
+    } else if (list[index - 2].secondBallScore == "/") {
+      if (list[index].secondBallScore == "X") {
+        var updatedPrevFrameScore =
+          parseInt(list[index - 2].gameTotalScore) +
+          parseInt(list[index].frameTotalScore);
+      } else if (list[index].secondBallScore == "/") {
+        var updatedPrevFrameScore =
+          parseInt(list[index - 2].gameTotalScore) +
+          parseInt(list[index].firstBallScore);
+      } else {
+        var updatedPrevFrameScore =
+          parseInt(list[index - 2].gameTotalScore) +
+          parseInt(list[index].firstBallScore);
+      }
+      list[index - 2] = {
+        ...list[index - 2],
+        ["gameTotalScore"]: updatedCurrFrameScore,
+      };
+
+      list[index] = {
+        ...list[index],
+        ["gameTotalScore"]:
+          parseInt(updatedPrevFrameScore) +
+          parseInt(list[index].frameTotalScore),
+      };
+    }
+    // }
+  };
+
   // Function to update values for individual mapped frame states
   const updateFrameStates = (e, index) => {
     const { name, value, id } = e.target;
@@ -170,71 +294,62 @@ const MainHomePage = () => {
 
     if (id == 1) {
       var currB1score = list[index].firstBallScore;
-
       var score = value;
-
       var currScore = "";
-      var currScore2 = "";
+      var otherBallScore = "";
       var storedFrameScore = "";
-      var totalScore = "";
 
       if (name == "firstBallScore") {
-        currScore = score;
-
-        if (currScore > 9 || currScore < 0) {
+        if (score > 9 || score < 0) {
           alert(
             "Please only input a score between 0 to 9 or x/X if you get a Strike"
           );
-          currScore = "";
         }
 
-        if (currScore == "X" || currScore == "x") {
-          currScore = "";
-          currScore2 = "X";
+        if (score == "X" || score == "x") {
+          otherBallScore = "X";
           storedFrameScore = "10";
+        } else {
+          currScore = score;
         }
+
         list[index] = {
           ...list[index],
           ["firstBallScore"]: currScore,
-          ["secondBallScore"]: currScore2,
+          ["secondBallScore"]: otherBallScore,
           ["frameTotalScore"]: storedFrameScore,
         };
-
         setScoreState(list);
       } else if (name == "secondBallScore") {
-        currScore = score;
         if (currB1score == "") {
-          alert("Please input a score for the first throw first");
-          currScore = "";
-        } else {
-          if (parseInt(currScore) + parseInt(currB1score) > 10) {
-            alert(
-              `Input a score only between 0 to ${10 - parseInt(currB1score)}`
-            );
-            currScore = "";
-          }
-        }
-        if (currB1score < 10) {
-          if (currScore == "/") {
-            currScore2 = "";
-            currScore = "/";
+          alert("Please input a score for the first ball throw first");
+        } else if (parseInt(score) + parseInt(currB1score) > 10) {
+          alert(
+            `Input a score only between 0 to ${10 - parseInt(currB1score)}`
+          );
+        } else if (currB1score < 10) {
+          if (score == "/") {
+            currScore = score;
+            otherBallScore = currB1score;
             storedFrameScore = "10";
           } else {
-            storedFrameScore = parseInt(currB1score) + parseInt(currScore);
+            currScore = score;
+            otherBallScore = currB1score;
+
+            storedFrameScore = parseInt(currB1score) + parseInt(score);
           }
         }
         list[index] = {
           ...list[index],
-          ["firstBallScore"]: currScore2,
+          ["firstBallScore"]: otherBallScore,
           ["secondBallScore"]: currScore,
           ["frameTotalScore"]: storedFrameScore,
         };
-
         setScoreState(list);
       }
       // Updating totalScore state for first frame
       if (list[index].secondBallScore != "") {
-        //update current frame total gamescore
+        //update total gamescore @ current frame
         var updatedCurrFrameScore = parseInt(list[index].frameTotalScore);
 
         list[index] = {
@@ -244,72 +359,65 @@ const MainHomePage = () => {
 
         setScoreState(list);
       }
-    }
-
-    if (id == 2) {
+    } else if (id == 2) {
       var currB1score = list[index].firstBallScore;
       var currB2score = list[index].secondBallScore;
 
       var score = value;
       var currScore = "";
-      var currScore2 = "";
+      var otherBallScore = "";
       var storedFrameScore = "";
-      var totalScore = "";
 
       // Update state of current frame
       if (name == "firstBallScore") {
-        currScore = score;
-        if (currScore > 9 || currScore < 0) {
+        if (score > 9 || score < 0) {
           alert(
             "Please only input a score between 0 to 9 or x/X if you get a Strike"
           );
-          currScore = "";
         }
-        if (currScore == "X" || currScore == "x") {
-          currScore = "";
-          currScore2 = "X";
+        if (score == "X" || score == "x") {
+          otherBallScore = "X";
           storedFrameScore = "10";
-        } else if (currScore < 10 && currB2score == "") {
-          storedFrameScore = currScore;
+        } else if (score < 10 && currB2score == "") {
+          currScore = score;
+          storedFrameScore = score;
         }
         list[index] = {
           ...list[index],
           ["firstBallScore"]: currScore,
-          ["secondBallScore"]: currScore2,
+          ["secondBallScore"]: otherBallScore,
           ["frameTotalScore"]: storedFrameScore,
         };
 
         setScoreState(list);
       } else if (name == "secondBallScore") {
-        currScore = score;
-
         if (currB1score == "") {
           alert("Please input a score for the first throw first");
-          currScore = "";
         } else {
-          if (parseInt(currScore) + parseInt(currB1score) > 9) {
+          if (parseInt(score) + parseInt(currB1score) > 9) {
             alert(
               `Input a score only between 0 to ${
                 9 - currB1score
               }. Input "/" if you get a spare.`
             );
-            currScore = "";
           }
         }
-        if (currB1score < 10 && currScore != "") {
-          if (currScore == "/") {
+        if (currB1score < 10 && score != "") {
+          if (score == "/") {
+            currScore = score;
+            otherBallScore = list[index].firstBallScore;
             storedFrameScore = "10";
-            currScore = "/";
-            currScore2 = list[index].firstBallScore;
           } else {
+            currScore = score;
+
             storedFrameScore = parseInt(currB1score) + parseInt(currScore);
-            currScore2 = currB1score;
+            otherBallScore = currB1score;
           }
         }
 
         list[index] = {
           ...list[index],
-          ["firstBallScore"]: currScore2,
+          ["firstBallScore"]: otherBallScore,
           ["secondBallScore"]: currScore,
           ["frameTotalScore"]: storedFrameScore,
         };
@@ -379,71 +487,76 @@ const MainHomePage = () => {
           };
 
           setScoreState(list);
+        } else {
+          var updatedCurrFrameScore =
+            parseInt(list[index - 1].gameTotalScore) + //
+            parseInt(list[index].frameTotalScore);
+
+          list[index] = {
+            ...list[index],
+            ["gameTotalScore"]: updatedCurrFrameScore,
+          };
+          setScoreState(list);
         }
       }
-    } else if (id == 3) {
+
+      // Updating of score for rest of frames 3-9
+    } else {
       var currB1score = list[index].firstBallScore;
       var currB2score = list[index].secondBallScore;
 
       var score = value;
       var currScore = "";
-      var currScore2 = "";
+      var otherBallScore = "";
       var storedFrameScore = "";
-      var totalScore = "";
 
       if (name == "firstBallScore") {
-        currScore = score;
-        if (currScore > 9 || currScore < 0) {
+        if (score > 9 || score < 0) {
           alert(
             "Please only input a score between 0 to 9 or x/X if you get a Strike"
           );
-          currScore = "";
         }
-        if (currScore == "X" || currScore == "x") {
+        if (score == "X" || score == "x") {
           currScore = "";
-          currScore2 = "X";
+          otherBallScore = "X";
           storedFrameScore = "10";
-        } else if (currScore < 10 && currB2score == "") {
+        } else if (score < 10 && currB2score == "") {
           storedFrameScore = currScore;
         }
         list[index] = {
           ...list[index],
           ["firstBallScore"]: currScore,
-          ["secondBallScore"]: currScore2,
+          ["secondBallScore"]: otherBallScore,
           ["frameTotalScore"]: storedFrameScore,
         };
 
         setScoreState(list);
       } else if (name == "secondBallScore") {
-        currScore = score;
-
         if (currB1score == "") {
           alert("Please input a score for the first throw first");
-          currScore = "";
         } else {
-          if (parseInt(currScore) + parseInt(currB1score) > 9) {
+          if (parseInt(score) + parseInt(currB1score) > 9) {
             alert(
               `Input a score only between 0 to ${
                 9 - currB1score
               }. Input "/" if you get a spare.`
             );
-            currScore = "";
           }
         }
-        if (currB1score < 10 && currScore != "") {
-          if (currScore == "/") {
-            storedFrameScore = "10";
+        if (currB1score < 10 && score != "") {
+          if (score == "/") {
             currScore = "/";
-            currScore2 = list[index].firstBallScore;
+            otherBallScore = list[index].firstBallScore;
+            storedFrameScore = "10";
           } else {
             storedFrameScore = parseInt(currB1score) + parseInt(currScore);
-            currScore2 = currB1score;
+            otherBallScore = currB1score;
           }
         }
 
         list[index] = {
           ...list[index],
-          ["firstBallScore"]: currScore2,
+          ["firstBallScore"]: otherBallScore,
           ["secondBallScore"]: currScore,
           ["frameTotalScore"]: storedFrameScore,
         };
@@ -527,17 +640,6 @@ const MainHomePage = () => {
     return <div>{list[index].gameTotalScore}</div>;
   };
 
-  const myframeList = [
-    { id: "frame2", text: "Frame 2", num: "2" },
-    { id: "frame3", text: "Frame 3", num: "3" },
-    { id: "frame4", text: "Frame 4", num: "4" },
-    { id: "frame5", text: "Frame 5", num: "5" },
-    { id: "frame6", text: "Frame 6", num: "6" },
-    { id: "frame7", text: "Frame 7", num: "7" },
-    { id: "frame8", text: "Frame 8", num: "8" },
-    { id: "frame9", text: "Frame 9", num: "9" },
-  ];
-
   // State for Currently Selected Frame
   const [isActive, setIsActive] = useState("");
 
@@ -563,45 +665,6 @@ const MainHomePage = () => {
       </div>
       <div className="bowling-frames">
         <div className="indiv-frame">
-          {/* <div
-            className={
-              "frameBox " +
-              (isActive === "Frame1" ? "activeFrameBox" : "inactiveFrameBox")
-            }
-            id="Frame1"
-          >
-            <div className="frameNoBox">
-              <Button
-                variant="text"
-                onClick={() => highlightCurrFrame("Frame1")}
-              >
-                Frame 1
-              </Button>
-            </div>
-            <div className="middleScoreBox">
-              <div className="indiv-scores" id="firstBall">
-                <input
-                  className="inputScores"
-                  type="text"
-                  id="1"
-                  name="firstBallScore"
-                  value={scoreState1.firstBallScore}
-                  onChange={handleInputFrame1}
-                ></input>
-              </div>
-              <div className="indiv-scores" id="secondBall">
-                <input
-                  className="inputScores"
-                  type="text"
-                  id="1"
-                  name="secondBallScore"
-                  value={scoreState1.secondBallScore}
-                  onChange={handleInputFrame1}
-                ></input>
-              </div>
-            </div>
-            <div className="totalFrameScoreBox">{displayScore1()}</div>
-          </div> */}
           {scoreState.map((frame, index) => (
             <div
               className={
@@ -619,7 +682,7 @@ const MainHomePage = () => {
                 </Button>
               </div>
               <div className="middleScoreBox">
-                <div className="indiv-scores">
+                <div className="indiv-scores firstBall">
                   <input
                     className="inputScores"
                     type="text"
@@ -645,9 +708,50 @@ const MainHomePage = () => {
               </div>
             </div>
           ))}
-
-          <div className="frameBox" id="10">
-            <div className="frameNoBox">Frame 10</div>
+          <div
+            className={
+              "frameBox10 " +
+              (isActive === 10 ? "activeFrameBox" : "inactiveFrameBox")
+            }
+            key={10}
+          >
+            <div className="frameNoBox">
+              <Button variant="text" onClick={() => highlightCurrFrame(10)}>
+                Frame 10
+              </Button>
+            </div>
+            <div className="middleScoreBox">
+              <div className="indiv-scores10 firstBall">
+                <input
+                  className="inputScores10"
+                  type="text"
+                  name="firstBallScore"
+                  id={10}
+                  value={scoreState10.firstBallScore}
+                  onChange={(e) => updateFrameStates10(e)}
+                ></input>
+              </div>
+              <div className="indiv-scores10 secondBall">
+                <input
+                  className="inputScores10"
+                  type="text"
+                  name="secondBallScore"
+                  id={10}
+                  value={scoreState10.secondBallScore}
+                  onChange={(e) => updateFrameStates10(e)}
+                ></input>
+              </div>
+              <div className="indiv-scores10  ">
+                <input
+                  className="inputScores10"
+                  type="text"
+                  name="thirdBallScore"
+                  id={10}
+                  value={scoreState10.thirdBallScore}
+                  onChange={(e) => updateFrameStates10(e)}
+                ></input>
+              </div>
+            </div>
           </div>
           <div className="frameBox" id="fnoHCP">
             <div className="frameNoBox">Handicap</div>
