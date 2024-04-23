@@ -90,6 +90,622 @@ const MainHomePage = () => {
     gameTotalScore: "",
   });
 
+  const [maxScoreState, setMaxScoreState] = useState(300);
+
+  // Function to update values for individual mapped frame states
+  const updateFrameStates = (e, index) => {
+    const { name, value, id } = e.target;
+    const list = [...scoreState];
+
+    if (id == 1) {
+      var currB1score = list[index].firstBallScore;
+      var score = value;
+      var currScore = "";
+      var otherBallScore = "";
+      var storedFrameScore = "";
+
+      if (name == "firstBallScore") {
+        if (score > 9 || score < 0) {
+          alert(
+            "Please only input a score between 0 to 9 or x/X if you get a Strike"
+          );
+        }
+
+        if (score == "X" || score == "x") {
+          otherBallScore = "X";
+          storedFrameScore = "10";
+        } else {
+          currScore = score;
+        }
+
+        list[index] = {
+          ...list[index],
+          ["firstBallScore"]: currScore,
+          ["secondBallScore"]: otherBallScore,
+          ["frameTotalScore"]: storedFrameScore,
+        };
+        setScoreState(list);
+      } else if (name == "secondBallScore") {
+        if (currB1score == "") {
+          alert("Please input a score for the first ball throw first");
+        } else if (parseInt(score) + parseInt(currB1score) > 10) {
+          alert(
+            `Input a score only between 0 to ${10 - parseInt(currB1score)}`
+          );
+        } else if (currB1score < 10) {
+          if (score == "/") {
+            currScore = score;
+            otherBallScore = currB1score;
+            storedFrameScore = "10";
+          } else {
+            currScore = score;
+            otherBallScore = currB1score;
+            storedFrameScore = parseInt(currB1score) + parseInt(score);
+          }
+        }
+        list[index] = {
+          ...list[index],
+          ["firstBallScore"]: otherBallScore,
+          ["secondBallScore"]: currScore,
+          ["frameTotalScore"]: storedFrameScore,
+        };
+        setScoreState(list);
+      }
+      // Updating totalScore state for first frame
+      if (list[index].secondBallScore != "") {
+        //update total gamescore @ current frame
+        var updatedCurrFrameScore = parseInt(list[index].frameTotalScore);
+
+        // Check to update max score
+        if (score == "/") {
+          var maxScore = (10 - parseInt(id)) * 30 + 20;
+          setMaxScoreState(maxScore);
+        } else if (score != "X") {
+          var maxScore = (10 - parseInt(id)) * 30 + parseInt(storedFrameScore);
+          setMaxScoreState(maxScore);
+        }
+
+        list[index] = {
+          ...list[index],
+          ["gameTotalScore"]: updatedCurrFrameScore,
+        };
+
+        setScoreState(list);
+      }
+
+      // Frame 2 specifically
+    } else if (id == 2) {
+      var currB1score = list[index].firstBallScore;
+      var currB2score = list[index].secondBallScore;
+
+      var score = value;
+      var currScore = "";
+      var otherBallScore = "";
+      var storedFrameScore = "";
+
+      // Update state of current frame
+      if (name == "firstBallScore") {
+        if (score > 9 || score < 0) {
+          alert(
+            "Please only input a score between 0 to 9 or x/X if you get a Strike"
+          );
+        }
+        if (score == "X" || score == "x") {
+          otherBallScore = "X";
+          storedFrameScore = "10";
+        } else if (score < 10 && currB2score == "") {
+          currScore = score;
+          storedFrameScore = score;
+        }
+        list[index] = {
+          ...list[index],
+          ["firstBallScore"]: currScore,
+          ["secondBallScore"]: otherBallScore,
+          ["frameTotalScore"]: storedFrameScore,
+        };
+
+        setScoreState(list);
+      } else if (name == "secondBallScore") {
+        if (currB1score == "") {
+          alert("Please input a score for the first throw first");
+        } else {
+          if (parseInt(score) + parseInt(currB1score) > 9) {
+            alert(
+              `Input a score only between 0 to ${
+                9 - currB1score
+              }. Input "/" if you get a spare.`
+            );
+          }
+        }
+        if (currB1score < 9 && score != "") {
+          if (score == "/") {
+            currScore = score;
+            otherBallScore = list[index].firstBallScore;
+            storedFrameScore = "10";
+          } else {
+            currScore = score;
+            storedFrameScore = parseInt(currB1score) + parseInt(currScore);
+            otherBallScore = currB1score;
+          }
+
+          list[index] = {
+            ...list[index],
+            ["firstBallScore"]: otherBallScore,
+            ["secondBallScore"]: currScore,
+            ["frameTotalScore"]: storedFrameScore,
+          };
+
+          setScoreState(list);
+        }
+      }
+
+      // Updating totalScore state for current frame 2
+      if (list[index].secondBallScore != "") {
+        // Case 1: Prev frame was a strike "X"
+        if (list[index - 1].secondBallScore == "X") {
+          // Update Previous frame total gamescore
+          var updatedPrevFrameScore =
+            parseInt(list[index - 1].gameTotalScore) + // 10
+            parseInt(list[index].frameTotalScore); // current framescore
+
+          // if current frame score is spare, maximum score will be (number of frames left * 30) + Score of Previous Frame + 20
+          if (list[index].secondBallScore == "/") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 + parseInt(updatedPrevFrameScore) + 20;
+            setMaxScoreState(maxScore);
+          } else if (list[index].secondBallScore != "X") {
+            // maximum score will be (number of frames left * 30) + Score of Previous Frame + Score of current frame
+            var maxScore =
+              (10 - parseInt(id)) * 30 +
+              parseInt(updatedPrevFrameScore) +
+              parseInt(storedFrameScore);
+            setMaxScoreState(maxScore);
+          }
+
+          list[index - 1] = {
+            ...list[index - 1],
+            ["gameTotalScore"]: updatedPrevFrameScore,
+          };
+          setScoreState(list);
+
+          //update current frame total gamescore
+          var updatedCurrFrameScore =
+            parseInt(updatedPrevFrameScore) +
+            parseInt(list[index].frameTotalScore);
+
+          list[index] = {
+            ...list[index],
+            ["gameTotalScore"]: updatedCurrFrameScore,
+          };
+          setScoreState(list);
+          // Case 2: Prev Frame was a spare "/", framescore is updated for next shot only
+        } else if (list[index - 1].secondBallScore == "/") {
+          // check if current frame is a strike "X"
+          if (list[index].secondBallScore == "X") {
+            // Update Previous frame total gamescore
+            var updatedPrevFrameScore =
+              parseInt(list[index - 1].gameTotalScore) + // 10
+              parseInt(list[index].frameTotalScore); // 10
+            // current frame not a strike !"X"
+          } else {
+            // Update Previous frame total gamescore
+            var updatedPrevFrameScore =
+              parseInt(list[index - 1].gameTotalScore) + //
+              parseInt(list[index].firstBallScore); // score for first ball thrown for current frame 2
+            // Check if current frame was a spare to calculate maximum score
+            if (list[index].secondBallScore == "/") {
+              var maxScore =
+                (10 - parseInt(id)) * 30 + parseInt(updatedPrevFrameScore) + 20;
+              setMaxScoreState(maxScore);
+            } else if (list[index].secondBallScore != "X") {
+              var maxScore =
+                (10 - parseInt(id)) * 30 +
+                parseInt(updatedPrevFrameScore) +
+                parseInt(storedFrameScore);
+              setMaxScoreState(maxScore);
+            }
+          }
+
+          list[index - 1] = {
+            ...list[index - 1],
+            ["gameTotalScore"]: updatedPrevFrameScore,
+          };
+
+          setScoreState(list);
+
+          //update current frame total gamescore
+          var updatedCurrFrameScore =
+            parseInt(updatedPrevFrameScore) + // uopdated prev frame score
+            parseInt(list[index].frameTotalScore); //score for current frame
+
+          list[index] = {
+            ...list[index],
+            ["gameTotalScore"]: updatedCurrFrameScore,
+          };
+
+          setScoreState(list);
+
+          // if frame 1 was an open frame
+        } else {
+          // only current frame 2 score will be updated
+          var updatedCurrFrameScore =
+            parseInt(list[index - 1].gameTotalScore) + //
+            parseInt(list[index].frameTotalScore);
+          list[index] = {
+            ...list[index],
+            ["gameTotalScore"]: updatedCurrFrameScore,
+          };
+          setScoreState(list);
+
+          if (list[index].secondBallScore == "/") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 +
+              parseInt(list[index - 1].gameTotalScore) +
+              20;
+            setMaxScoreState(maxScore);
+          } else if (list[index].secondBallScore != "X") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 + parseInt(updatedCurrFrameScore);
+            setMaxScoreState(maxScore);
+          }
+        }
+      }
+
+      // Updating of score for rest of frames 3-9
+    } else {
+      var currB1score = list[index].firstBallScore;
+      var currB2score = list[index].secondBallScore;
+
+      var score = value;
+      var currScore = "";
+      var otherBallScore = "";
+      var storedFrameScore = "";
+
+      if (name == "firstBallScore") {
+        if (score > 9 || score < 0) {
+          alert(
+            "Please only input a score between 0 to 9 or x/X if you get a Strike"
+          );
+        }
+        if (score == "X" || score == "x") {
+          currScore = "";
+          otherBallScore = "X";
+          storedFrameScore = "10";
+        } else if (score < 10 && currB2score == "") {
+          currScore = score;
+          storedFrameScore = currScore;
+        }
+        list[index] = {
+          ...list[index],
+          ["firstBallScore"]: currScore,
+          ["secondBallScore"]: otherBallScore,
+          ["frameTotalScore"]: storedFrameScore,
+        };
+
+        setScoreState(list);
+      } else if (name == "secondBallScore") {
+        if (currB1score == "") {
+          alert("Please input a score for the first throw first");
+        } else {
+          if (parseInt(score) + parseInt(currB1score) > 9) {
+            alert(
+              `Input a score only between 0 to ${
+                9 - currB1score
+              }. Input "/" if you get a spare.`
+            );
+          }
+        }
+        if (currB1score < 10 && score != "") {
+          if (score == "/") {
+            currScore = "/";
+            otherBallScore = list[index].firstBallScore;
+            storedFrameScore = "10";
+          } else {
+            currScore = score;
+            storedFrameScore = parseInt(currB1score) + parseInt(currScore);
+            otherBallScore = currB1score;
+          }
+        }
+
+        list[index] = {
+          ...list[index],
+          ["firstBallScore"]: otherBallScore,
+          ["secondBallScore"]: currScore,
+          ["frameTotalScore"]: storedFrameScore,
+        };
+
+        setScoreState(list);
+      }
+
+      // Updating of total displayed score for past two frames
+      // contingent on whether there are strikes and spares
+      if (list[index].secondBallScore != "") {
+        // Case 1: Past 2 Frames were Strikes (XX)
+        if (
+          list[index - 2].secondBallScore == "X" &&
+          list[index - 1].secondBallScore == "X"
+        ) {
+          // if current frame was a strike
+          if (list[index].secondBallScore == "X") {
+            // Update past 2nd frame totalscore
+            var updatedPrev2ndFrameScore =
+              parseInt(list[index - 2].gameTotalScore) + // 20 for prev 2nd frame
+              parseInt(list[index].frameTotalScore); // total frame score for current frame
+
+            // Update past frame totalscore
+            var updatedPrevFrameScore =
+              parseInt(updatedPrev2ndFrameScore) + // 30
+              parseInt(list[index - 1].frameTotalScore) + // 10
+              parseInt(list[index].frameTotalScore); // 10
+
+            // Update current frame total score
+            var updatedCurrFrameScore =
+              parseInt(updatedPrevFrameScore) + // 50
+              parseInt(list[index].frameTotalScore); // total frame score for current frame
+          }
+
+          // if current frame was a spare, we only consider the first shot for of current frame for updating of prev 2nd frame
+          else if (list[index].secondBallScore == "/") {
+            // Update past 2nd frame totalscore
+            var updatedPrev2ndFrameScore =
+              parseInt(list[index - 2].gameTotalScore) + // 20 for prev 2nd frame
+              parseInt(list[index].firstBallScore); // first ball score for current frame
+
+            // Update past frame totalscore
+            var updatedPrevFrameScore =
+              parseInt(updatedPrev2ndFrameScore) + // updated prev 2nd frame score
+              parseInt(list[index - 1].frameTotalScore) + // 10
+              parseInt(list[index].frameTotalScore); // 10
+
+            // Update current frame total score
+            var updatedCurrFrameScore =
+              parseInt(updatedPrevFrameScore) + // 50
+              parseInt(list[index].frameTotalScore); // total frame score for current frame
+          } else {
+            var updatedPrev2ndFrameScore =
+              parseInt(list[index - 2].gameTotalScore) + // 20 for prev 2nd frame
+              parseInt(list[index].firstBallScore); // first ball score for current frame
+
+            // Update past frame totalscore
+            var updatedPrevFrameScore =
+              parseInt(updatedPrev2ndFrameScore) + // updated prev 2nd frame score
+              parseInt(list[index - 1].frameTotalScore) + // 10
+              parseInt(list[index].frameTotalScore); // 10
+
+            // Update current frame total score
+            var updatedCurrFrameScore =
+              parseInt(updatedPrevFrameScore) + // 50
+              parseInt(list[index].frameTotalScore); // total frame score for current frame
+          }
+
+          // Update past 2nd frame totalscore state
+          list[index - 2] = {
+            ...list[index - 2],
+            ["gameTotalScore"]: updatedPrev2ndFrameScore,
+          };
+
+          // Update past frame totalscore state
+          list[index - 1] = {
+            ...list[index - 1],
+            ["gameTotalScore"]: updatedPrevFrameScore,
+          };
+
+          // Update current frame totalscore state
+          list[index] = {
+            ...list[index],
+            ["gameTotalScore"]: updatedCurrFrameScore,
+          };
+
+          setScoreState(list);
+
+          if (list[index].secondBallScore == "/") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 +
+              parseInt(list[index - 1].gameTotalScore) +
+              20;
+            setMaxScoreState(maxScore);
+          } else if (list[index].secondBallScore != "X") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 + parseInt(updatedCurrFrameScore);
+            setMaxScoreState(maxScore);
+          }
+
+          // case 2: Past 2nd Frames was Spare and past Frame was strike (/X)
+        } else if (
+          list[index - 2].secondBallScore == "/" &&
+          list[index - 1].secondBallScore == "X"
+        ) {
+          var updatedPrevFrameScore =
+            parseInt(list[index - 1].gameTotalScore) +
+            parseInt(list[index].frameTotalScore);
+
+          var updatedCurrFrameScore =
+            parseInt(updatedPrevFrameScore) +
+            parseInt(list[index].frameTotalScore);
+
+          // Update past frame totalscore state
+          list[index - 1] = {
+            ...list[index - 1],
+            ["gameTotalScore"]: updatedPrevFrameScore,
+          };
+
+          // Update current frame totalscore state
+          list[index] = {
+            ...list[index],
+            ["gameTotalScore"]: updatedCurrFrameScore,
+          };
+          setScoreState(list);
+
+          if (list[index].secondBallScore == "/") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 + parseInt(updatedPrevFrameScore) + 20;
+            setMaxScoreState(maxScore);
+          } else if (list[index].secondBallScore != "X") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 +
+              parseInt(updatedPrevFrameScore) +
+              parseInt(storedFrameScore);
+            setMaxScoreState(maxScore);
+          }
+        } else if (
+          list[index - 2].secondBallScore == "X" &&
+          list[index - 1].secondBallScore == "/"
+        ) {
+          if (list[index].secondBallScore == "X") {
+            var updatedPrevFrameScore =
+              parseInt(list[index - 1].gameTotalScore) +
+              parseInt(list[index].frameTotalScore);
+          } else {
+            var updatedPrevFrameScore =
+              parseInt(list[index - 1].gameTotalScore) +
+              parseInt(list[index].firstBallScore);
+          }
+
+          var updatedCurrFrameScore =
+            parseInt(updatedPrevFrameScore) +
+            parseInt(list[index].frameTotalScore);
+
+          // Update past frame totalscore state
+          list[index - 1] = {
+            ...list[index - 1],
+            ["gameTotalScore"]: updatedPrevFrameScore,
+          };
+
+          // Update current frame totalscore state
+          list[index] = {
+            ...list[index],
+            ["gameTotalScore"]: updatedCurrFrameScore,
+          };
+          setScoreState(list);
+
+          if (list[index].secondBallScore == "/") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 + parseInt(updatedPrevFrameScore) + 20;
+            setMaxScoreState(maxScore);
+          } else if (list[index].secondBallScore != "X") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 +
+              parseInt(updatedPrevFrameScore) +
+              parseInt(storedFrameScore);
+            setMaxScoreState(maxScore);
+          }
+        } else if (
+          list[index - 2].secondBallScore == "/" &&
+          list[index - 1].secondBallScore == "/"
+        ) {
+          if (list[index].secondBallScore == "X") {
+            var updatedPrevFrameScore =
+              parseInt(list[index - 1].gameTotalScore) +
+              parseInt(list[index].frameTotalScore);
+          } else {
+            var updatedPrevFrameScore =
+              parseInt(list[index - 1].gameTotalScore) +
+              parseInt(list[index].firstBallScore);
+          }
+          var updatedCurrFrameScore =
+            parseInt(updatedPrevFrameScore) +
+            parseInt(list[index].frameTotalScore);
+
+          // Update past frame totalscore state
+          list[index - 1] = {
+            ...list[index - 1],
+            ["gameTotalScore"]: updatedPrevFrameScore,
+          };
+
+          // Update current frame totalscore state
+          list[index] = {
+            ...list[index],
+            ["gameTotalScore"]: updatedCurrFrameScore,
+          };
+          setScoreState(list);
+
+          if (list[index].secondBallScore == "/") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 + parseInt(updatedPrevFrameScore) + 20;
+            setMaxScoreState(maxScore);
+          } else if (list[index].secondBallScore != "X") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 +
+              parseInt(updatedPrevFrameScore) +
+              parseInt(storedFrameScore);
+            setMaxScoreState(maxScore);
+          }
+        } else if (
+          (list[index - 2].secondBallScore != "X" ||
+            list[index - 2].secondBallScore != "/") &&
+          list[index - 1].secondBallScore == "X"
+        ) {
+          var updatedPrevFrameScore =
+            parseInt(list[index - 1].gameTotalScore) +
+            parseInt(list[index].frameTotalScore);
+          var updatedCurrFrameScore =
+            parseInt(updatedPrevFrameScore) + parseInt(storedFrameScore);
+          list[index - 1] = {
+            ...list[index - 1],
+            ["gameTotalScore"]: updatedPrevFrameScore,
+          };
+          list[index] = {
+            ...list[index],
+            ["gameTotalScore"]: updatedCurrFrameScore,
+          };
+          setScoreState(list);
+          if (list[index].secondBallScore == "/") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 + parseInt(updatedPrevFrameScore) + 20;
+            setMaxScoreState(maxScore);
+          } else if (list[index].secondBallScore != "X") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 +
+              parseInt(updatedPrevFrameScore) +
+              parseInt(storedFrameScore);
+            setMaxScoreState(maxScore);
+          }
+        } else if (
+          (list[index - 2].secondBallScore != "X" ||
+            list[index - 2].secondBallScore != "/") &&
+          list[index - 1].secondBallScore == "/"
+        ) {
+          var updatedPrevFrameScore =
+            parseInt(list[index - 1].gameTotalScore) +
+            parseInt(list[index].firstBallScore);
+          var updatedCurrFrameScore =
+            parseInt(updatedPrevFrameScore) + parseInt(storedFrameScore);
+          list[index - 1] = {
+            ...list[index - 1],
+            ["gameTotalScore"]: updatedPrevFrameScore,
+          };
+          list[index] = {
+            ...list[index],
+            ["gameTotalScore"]: updatedCurrFrameScore,
+          };
+          setScoreState(list);
+
+          if (list[index].secondBallScore == "/") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 + parseInt(updatedPrevFrameScore) + 20;
+            setMaxScoreState(maxScore);
+          } else if (list[index].secondBallScore != "X") {
+            var maxScore =
+              (10 - parseInt(id)) * 30 +
+              parseInt(updatedPrevFrameScore) +
+              parseInt(storedFrameScore);
+            setMaxScoreState(maxScore);
+          }
+        } else {
+          var updatedCurrFrameScore =
+            parseInt(list[index - 1].gameTotalScore) +
+            parseInt(list[index].frameTotalScore);
+
+          list[index] = {
+            ...list[index],
+            ["gameTotalScore"]: updatedCurrFrameScore,
+          };
+          setScoreState(list);
+        }
+      }
+    }
+  };
+
   // Function to update values for Special Frame 10
   const updateFrameStates10 = (e) => {
     const { name, value, id } = e.target;
@@ -238,6 +854,8 @@ const MainHomePage = () => {
           parseInt(list[8].frameTotalScore) + // 10
           parseInt(scoreToAdd); // 10
 
+        console.log("UPFS " + updatedPrevFrameScore);
+
         // Update current frame total score
         var updatedCurrFrameScore =
           parseInt(updatedPrevFrameScore) + // 50
@@ -266,8 +884,42 @@ const MainHomePage = () => {
           ["frameTotalScore"]: storedFrameScore,
           ["gameTotalScore"]: updatedCurrFrameScore,
         });
+      } else if (name == "secondBallScore") {
+        if (currScore == "X") {
+          var scoreToAdd = "10";
+        } else {
+          var scoreToAdd = score;
+        }
+
+        // Update 2nd past frame totalscore
+        var updatedPrev2ndFrameScore =
+          parseInt(list[8].gameTotalScore) + parseInt(scoreToAdd); // 10
+
+        // Update current frame total score
+        var updatedCurrFrameScore =
+          parseInt(updatedPrev2ndFrameScore) +
+          parseInt(scoreState10.frameTotalScore) +
+          parseInt(scoreToAdd);
+
+        // Update past frame totalscore state
+        list[8] = {
+          ...list[8],
+          ["gameTotalScore"]: updatedPrev2ndFrameScore,
+        };
+        setScoreState(list);
+
+        // Update current frame totalscore state
+        setScoreState10({
+          ...scoreState10,
+          ["firstBallScore"]: otherBallScore,
+          ["secondBallScore"]: currScore,
+          ["thirdBallScore"]: otherBallScore2,
+          ["frameTotalScore"]: storedFrameScore,
+          ["gameTotalScore"]: updatedCurrFrameScore,
+        });
       }
-    } else if (list[8].secondBallScore == "X") {
+    }
+    if (list[7].secondBallScore != "X" && list[8].secondBallScore == "X") {
       if (name == "firstBallScore") {
         if (currScore == "X") {
           var scoreToAdd = "10";
@@ -512,507 +1164,6 @@ const MainHomePage = () => {
     }
   };
 
-  // Function to update values for individual mapped frame states
-  const updateFrameStates = (e, index) => {
-    const { name, value, id } = e.target;
-    const list = [...scoreState];
-
-    if (id == 1) {
-      var currB1score = list[index].firstBallScore;
-      var score = value;
-      var currScore = "";
-      var otherBallScore = "";
-      var storedFrameScore = "";
-
-      if (name == "firstBallScore") {
-        if (score > 9 || score < 0) {
-          alert(
-            "Please only input a score between 0 to 9 or x/X if you get a Strike"
-          );
-        }
-
-        if (score == "X" || score == "x") {
-          otherBallScore = "X";
-          storedFrameScore = "10";
-        } else {
-          currScore = score;
-        }
-
-        list[index] = {
-          ...list[index],
-          ["firstBallScore"]: currScore,
-          ["secondBallScore"]: otherBallScore,
-          ["frameTotalScore"]: storedFrameScore,
-        };
-        setScoreState(list);
-      } else if (name == "secondBallScore") {
-        if (currB1score == "") {
-          alert("Please input a score for the first ball throw first");
-        } else if (parseInt(score) + parseInt(currB1score) > 10) {
-          alert(
-            `Input a score only between 0 to ${10 - parseInt(currB1score)}`
-          );
-        } else if (currB1score < 10) {
-          if (score == "/") {
-            currScore = score;
-            otherBallScore = currB1score;
-            storedFrameScore = "10";
-          } else {
-            currScore = score;
-            otherBallScore = currB1score;
-
-            storedFrameScore = parseInt(currB1score) + parseInt(score);
-          }
-        }
-        list[index] = {
-          ...list[index],
-          ["firstBallScore"]: otherBallScore,
-          ["secondBallScore"]: currScore,
-          ["frameTotalScore"]: storedFrameScore,
-        };
-        setScoreState(list);
-      }
-      // Updating totalScore state for first frame
-      if (list[index].secondBallScore != "") {
-        //update total gamescore @ current frame
-        var updatedCurrFrameScore = parseInt(list[index].frameTotalScore);
-
-        list[index] = {
-          ...list[index],
-          ["gameTotalScore"]: updatedCurrFrameScore,
-        };
-
-        setScoreState(list);
-      }
-
-      // Frame 2 specifically
-    } else if (id == 2) {
-      var currB1score = list[index].firstBallScore;
-      var currB2score = list[index].secondBallScore;
-
-      var score = value;
-      var currScore = "";
-      var otherBallScore = "";
-      var storedFrameScore = "";
-
-      // Update state of current frame
-      if (name == "firstBallScore") {
-        if (score > 9 || score < 0) {
-          alert(
-            "Please only input a score between 0 to 9 or x/X if you get a Strike"
-          );
-        }
-        if (score == "X" || score == "x") {
-          otherBallScore = "X";
-          storedFrameScore = "10";
-        } else if (score < 10 && currB2score == "") {
-          currScore = score;
-          storedFrameScore = score;
-        }
-        list[index] = {
-          ...list[index],
-          ["firstBallScore"]: currScore,
-          ["secondBallScore"]: otherBallScore,
-          ["frameTotalScore"]: storedFrameScore,
-        };
-
-        setScoreState(list);
-      } else if (name == "secondBallScore") {
-        if (currB1score == "") {
-          alert("Please input a score for the first throw first");
-        } else {
-          if (parseInt(score) + parseInt(currB1score) > 9) {
-            alert(
-              `Input a score only between 0 to ${
-                9 - currB1score
-              }. Input "/" if you get a spare.`
-            );
-          }
-        }
-        if (currB1score < 10 && score != "") {
-          if (score == "/") {
-            currScore = score;
-            otherBallScore = list[index].firstBallScore;
-            storedFrameScore = "10";
-          } else {
-            currScore = score;
-
-            storedFrameScore = parseInt(currB1score) + parseInt(currScore);
-            otherBallScore = currB1score;
-          }
-        }
-
-        list[index] = {
-          ...list[index],
-          ["firstBallScore"]: otherBallScore,
-          ["secondBallScore"]: currScore,
-          ["frameTotalScore"]: storedFrameScore,
-        };
-
-        setScoreState(list);
-      }
-
-      // Updating totalScore state for current frame 2
-      if (list[index].secondBallScore != "") {
-        // Case 1: Prev frame was a strike "X"
-        if (list[index - 1].secondBallScore == "X") {
-          // Update Previous frame total gamescore
-          var updatedPrevFrameScore =
-            parseInt(list[index - 1].gameTotalScore) + // 10
-            parseInt(list[index].frameTotalScore); // current framescore
-
-          list[index - 1] = {
-            ...list[index - 1],
-            ["gameTotalScore"]: updatedPrevFrameScore,
-          };
-
-          setScoreState(list);
-
-          //update current frame total gamescore
-          var updatedCurrFrameScore =
-            parseInt(updatedPrevFrameScore) +
-            parseInt(list[index].frameTotalScore);
-
-          list[index] = {
-            ...list[index],
-            ["gameTotalScore"]: updatedCurrFrameScore,
-          };
-
-          setScoreState(list);
-          // Case 2: Prev Frame was a spare "/", framescore is updated for next shot only
-        } else if (list[index - 1].secondBallScore == "/") {
-          // current frame is a strike "X"
-          if (list[index].secondBallScore == "X") {
-            // Update Previous frame total gamescore
-            var updatedPrevFrameScore =
-              parseInt(list[index - 1].gameTotalScore) + // 10
-              parseInt(list[index].frameTotalScore); // 10
-            // current frame not a strike !"X"
-          } else {
-            // Update Previous frame total gamescore
-            var updatedPrevFrameScore =
-              parseInt(list[index - 1].gameTotalScore) + //
-              parseInt(list[index].firstBallScore); // score for first ball thrown for current frame 2
-          }
-          list[index - 1] = {
-            ...list[index - 1],
-            ["gameTotalScore"]: updatedPrevFrameScore,
-          };
-
-          setScoreState(list);
-
-          //update current frame total gamescore
-
-          var updatedCurrFrameScore =
-            parseInt(updatedPrevFrameScore) + // uopdated prev frame score
-            parseInt(list[index].frameTotalScore); //score for current frame
-
-          list[index] = {
-            ...list[index],
-            ["gameTotalScore"]: updatedCurrFrameScore,
-          };
-
-          setScoreState(list);
-          // if frame 1 was an open frame
-        } else {
-          // only current frame 2 score will be updated
-          var updatedCurrFrameScore =
-            parseInt(list[index - 1].gameTotalScore) + //
-            parseInt(list[index].frameTotalScore);
-
-          list[index] = {
-            ...list[index],
-            ["gameTotalScore"]: updatedCurrFrameScore,
-          };
-          setScoreState(list);
-        }
-      }
-
-      // Updating of score for rest of frames 3-9
-    } else {
-      var currB1score = list[index].firstBallScore;
-      var currB2score = list[index].secondBallScore;
-
-      var score = value;
-      var currScore = "";
-      var otherBallScore = "";
-      var storedFrameScore = "";
-
-      if (name == "firstBallScore") {
-        if (score > 9 || score < 0) {
-          alert(
-            "Please only input a score between 0 to 9 or x/X if you get a Strike"
-          );
-        }
-        if (score == "X" || score == "x") {
-          currScore = "";
-          otherBallScore = "X";
-          storedFrameScore = "10";
-        } else if (score < 10 && currB2score == "") {
-          currScore = score;
-          storedFrameScore = currScore;
-        }
-        list[index] = {
-          ...list[index],
-          ["firstBallScore"]: currScore,
-          ["secondBallScore"]: otherBallScore,
-          ["frameTotalScore"]: storedFrameScore,
-        };
-
-        setScoreState(list);
-      } else if (name == "secondBallScore") {
-        if (currB1score == "") {
-          alert("Please input a score for the first throw first");
-        } else {
-          if (parseInt(score) + parseInt(currB1score) > 9) {
-            alert(
-              `Input a score only between 0 to ${
-                9 - currB1score
-              }. Input "/" if you get a spare.`
-            );
-          }
-        }
-        if (currB1score < 10 && score != "") {
-          if (score == "/") {
-            currScore = "/";
-            otherBallScore = list[index].firstBallScore;
-            storedFrameScore = "10";
-          } else {
-            currScore = score;
-            storedFrameScore = parseInt(currB1score) + parseInt(currScore);
-            otherBallScore = currB1score;
-          }
-        }
-
-        list[index] = {
-          ...list[index],
-          ["firstBallScore"]: otherBallScore,
-          ["secondBallScore"]: currScore,
-          ["frameTotalScore"]: storedFrameScore,
-        };
-
-        setScoreState(list);
-      }
-
-      // Updating of total displayed score for past two frames
-      // contingent on whether there are strikes and spares
-      if (list[index].secondBallScore != "") {
-        // Case 1: Past 2 Frames were Strikes (XX)
-        if (
-          list[index - 2].secondBallScore == "X" &&
-          list[index - 1].secondBallScore == "X"
-        ) {
-          // if current frame was a strike
-          if (list[index].secondBallScore == "X") {
-            // Update past 2nd frame totalscore
-            var updatedPrev2ndFrameScore =
-              parseInt(list[index - 2].gameTotalScore) + // 20 for prev 2nd frame
-              parseInt(list[index].frameTotalScore); // total frame score for current frame
-
-            // Update past frame totalscore
-            var updatedPrevFrameScore =
-              parseInt(updatedPrev2ndFrameScore) + // 30
-              parseInt(list[index - 1].frameTotalScore) + // 10
-              parseInt(list[index].frameTotalScore); // 10
-
-            // Update current frame total score
-            var updatedCurrFrameScore =
-              parseInt(updatedPrevFrameScore) + // 50
-              parseInt(list[index].frameTotalScore); // total frame score for current frame
-          }
-
-          // if current frame was a spare, we only consider the first shot for of current frame for updating of prev 2nd frame
-          else if (list[index].secondBallScore == "/") {
-            // Update past 2nd frame totalscore
-            var updatedPrev2ndFrameScore =
-              parseInt(list[index - 2].gameTotalScore) + // 20 for prev 2nd frame
-              parseInt(list[index].firstBallScore); // first ball score for current frame
-
-            // Update past frame totalscore
-            var updatedPrevFrameScore =
-              parseInt(updatedPrev2ndFrameScore) + // updated prev 2nd frame score
-              parseInt(list[index - 1].frameTotalScore) + // 10
-              parseInt(list[index].frameTotalScore); // 10
-
-            // Update current frame total score
-            var updatedCurrFrameScore =
-              parseInt(updatedPrevFrameScore) + // 50
-              parseInt(list[index].frameTotalScore); // total frame score for current frame
-          } else {
-            var updatedPrev2ndFrameScore =
-              parseInt(list[index - 2].gameTotalScore) + // 20 for prev 2nd frame
-              parseInt(list[index].firstBallScore); // first ball score for current frame
-
-            // Update past frame totalscore
-            var updatedPrevFrameScore =
-              parseInt(updatedPrev2ndFrameScore) + // updated prev 2nd frame score
-              parseInt(list[index - 1].frameTotalScore) + // 10
-              parseInt(list[index].frameTotalScore); // 10
-
-            // Update current frame total score
-            var updatedCurrFrameScore =
-              parseInt(updatedPrevFrameScore) + // 50
-              parseInt(list[index].frameTotalScore); // total frame score for current frame
-          }
-
-          // Update past 2nd frame totalscore state
-          list[index - 2] = {
-            ...list[index - 2],
-            ["gameTotalScore"]: updatedPrev2ndFrameScore,
-          };
-
-          // Update past frame totalscore state
-          list[index - 1] = {
-            ...list[index - 1],
-            ["gameTotalScore"]: updatedPrevFrameScore,
-          };
-
-          // Update current frame totalscore state
-          list[index] = {
-            ...list[index],
-            ["gameTotalScore"]: updatedCurrFrameScore,
-          };
-
-          setScoreState(list);
-          // case 2: Past 2nd Frames was Spare and past Frame was strike (/X)
-        } else if (
-          list[index - 2].secondBallScore == "/" &&
-          list[index - 1].secondBallScore == "X"
-        ) {
-          var updatedPrevFrameScore =
-            parseInt(list[index - 1].gameTotalScore) +
-            parseInt(list[index].frameTotalScore);
-
-          var updatedCurrFrameScore =
-            parseInt(updatedPrevFrameScore) +
-            parseInt(list[index].frameTotalScore);
-
-          // Update past frame totalscore state
-          list[index - 1] = {
-            ...list[index - 1],
-            ["gameTotalScore"]: updatedPrevFrameScore,
-          };
-
-          // Update current frame totalscore state
-          list[index] = {
-            ...list[index],
-            ["gameTotalScore"]: updatedCurrFrameScore,
-          };
-          setScoreState(list);
-        } else if (
-          list[index - 2].secondBallScore == "X" &&
-          list[index - 1].secondBallScore == "/"
-        ) {
-          if (list[index].secondBallScore == "X") {
-            var updatedPrevFrameScore =
-              parseInt(list[index - 1].gameTotalScore) +
-              parseInt(list[index].frameTotalScore);
-          } else {
-            var updatedPrevFrameScore =
-              parseInt(list[index - 1].gameTotalScore) +
-              parseInt(list[index].firstBallScore);
-          }
-
-          var updatedCurrFrameScore =
-            parseInt(updatedPrevFrameScore) +
-            parseInt(list[index].frameTotalScore);
-
-          // Update past frame totalscore state
-          list[index - 1] = {
-            ...list[index - 1],
-            ["gameTotalScore"]: updatedPrevFrameScore,
-          };
-
-          // Update current frame totalscore state
-          list[index] = {
-            ...list[index],
-            ["gameTotalScore"]: updatedCurrFrameScore,
-          };
-          setScoreState(list);
-        } else if (
-          list[index - 2].secondBallScore == "/" &&
-          list[index - 1].secondBallScore == "/"
-        ) {
-          if (list[index].secondBallScore == "X") {
-            var updatedPrevFrameScore =
-              parseInt(list[index - 1].gameTotalScore) +
-              parseInt(list[index].frameTotalScore);
-          } else {
-            var updatedPrevFrameScore =
-              parseInt(list[index - 1].gameTotalScore) +
-              parseInt(list[index].firstBallScore);
-          }
-          var updatedCurrFrameScore =
-            parseInt(updatedPrevFrameScore) +
-            parseInt(list[index].frameTotalScore);
-
-          // Update past frame totalscore state
-          list[index - 1] = {
-            ...list[index - 1],
-            ["gameTotalScore"]: updatedPrevFrameScore,
-          };
-
-          // Update current frame totalscore state
-          list[index] = {
-            ...list[index],
-            ["gameTotalScore"]: updatedCurrFrameScore,
-          };
-          setScoreState(list);
-        } else if (
-          (list[index - 2].secondBallScore != "X" ||
-            list[index - 2].secondBallScore != "/") &&
-          list[index - 1].secondBallScore == "X"
-        ) {
-          var updatedPrevFrameScore =
-            parseInt(list[index - 1].gameTotalScore) +
-            parseInt(list[index].frameTotalScore);
-          var updatedCurrFrameScore =
-            parseInt(updatedPrevFrameScore) +
-            parseInt(list[index].frameTotalScore);
-          list[index - 1] = {
-            ...list[index - 1],
-            ["gameTotalScore"]: updatedPrevFrameScore,
-          };
-          list[index] = {
-            ...list[index],
-            ["gameTotalScore"]: updatedCurrFrameScore,
-          };
-          setScoreState(list);
-        } else if (
-          (list[index - 2].secondBallScore != "X" ||
-            list[index - 2].secondBallScore != "/") &&
-          list[index - 1].secondBallScore == "/"
-        ) {
-          var updatedPrevFrameScore =
-            parseInt(list[index - 1].gameTotalScore) +
-            parseInt(list[index].firstBallScore);
-          var updatedCurrFrameScore =
-            parseInt(list[index - 1].gameTotalScore) +
-            parseInt(list[index].frameTotalScore);
-          list[index - 1] = {
-            ...list[index - 1],
-            ["gameTotalScore"]: updatedPrevFrameScore,
-          };
-          list[index] = {
-            ...list[index],
-            ["gameTotalScore"]: updatedCurrFrameScore,
-          };
-          setScoreState(list);
-        } else {
-          var updatedCurrFrameScore =
-            parseInt(list[index - 1].gameTotalScore) +
-            parseInt(list[index].frameTotalScore);
-
-          list[index] = {
-            ...list[index],
-            ["gameTotalScore"]: updatedCurrFrameScore,
-          };
-          setScoreState(list);
-        }
-      }
-    }
-  };
-
   const updateTotalScore = (index) => {
     const list = [...scoreState];
 
@@ -1028,7 +1179,6 @@ const MainHomePage = () => {
 
   // Function to Update Current Frame Number on Click and Highlight
   // Current State
-
   const highlightCurrFrame = (frameid) => {
     // set currFrameNo to currently selected Frame
     setIsActive(frameid);
@@ -1036,6 +1186,10 @@ const MainHomePage = () => {
     // Return set Div to change background colour
     // const currFrameDiv = document.getElementById(currFrameNo);
     // currFrameDiv.style.backgroundColor = "white";
+  };
+
+  const calculateMaxScore = () => {
+    return <div>{maxScoreState}</div>;
   };
 
   return (
@@ -1137,11 +1291,13 @@ const MainHomePage = () => {
             </div>
             <div className="totalFrameScoreBox">{updateTotalScore10()}</div>
           </div>
-          <div className="frameBox" id="fnoHCP">
+          {/* <div className="frameBox" id="fnoHCP">
             <div className="frameNoBox">Handicap</div>
-          </div>
+            <div className="HandicapBox">Handicap</div>
+          </div> */}
           <div className="frameBox" id="fnoMAX">
             <div className="frameNoBox">Max Score</div>
+            <div className="MaxScoreBox">{calculateMaxScore()}</div>
           </div>
         </div>
       </div>
