@@ -8,19 +8,24 @@ import RegisterPage from "./pages/RegisterPage";
 
 import MainHomePage from "./pages/MainHomePage";
 
+import Sidebar from "./Components/Sidebar";
+
 function App() {
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<WelcomePage />}></Route>
-          <Route path="/login" element={<LoginPage />}></Route>
-          <Route path="/register" element={<RegisterPage />}></Route>
+        <div className="bigapp">
+          <Sidebar />
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<WelcomePage />}></Route>
+            <Route path="/login" element={<LoginPage />}></Route>
+            <Route path="/register" element={<RegisterPage />}></Route>
 
-          {/* Protected Routes */}
-          <Route path="/home" element={<MainHomePage />}></Route>
-        </Routes>
+            {/* Protected Routes */}
+            <Route path="/home" element={<MainHomePage />}></Route>
+          </Routes>
+        </div>
       </BrowserRouter>
     </>
   );

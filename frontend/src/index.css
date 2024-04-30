@@ -60,7 +60,7 @@ button {
   border-radius: 10px;
 }
 
-/* Main Home Page CSS */
+/* Main Home Page CSS ( Score Calulator) */
 
 #root {
   height: 100%;
@@ -129,6 +129,8 @@ button {
 
 #fnoMAX {
   border-right: 2px solid black;
+  display: flex;
+  flex-direction: column;
 }
 
 .middleScoreBox {
@@ -191,4 +193,35 @@ button {
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.MaxScoreBox {
+  height: 73%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+Button {
+  color: black;
+}
+
+/* SideBar CSS */
+
+.sidebar {
+  position: relative;
+  height: 100%;
+  width: 10%;
+  background-color: whitesmoke;
+  display: flex;
+  justify-content: start;
+}
+
+ul {
+  padding-right: 20px;
+  padding-left: 30px;
+}
+
+a {
+  text-decoration: none;
 }

@@ -103,6 +103,7 @@ const MainHomePage = () => {
       var currScore = "";
       var otherBallScore = "";
       var storedFrameScore = "";
+      var scoreForMax = "";
 
       if (name == "firstBallScore") {
         if (score > 9 || score < 0) {
@@ -112,6 +113,7 @@ const MainHomePage = () => {
         }
 
         if (score == "X" || score == "x") {
+          scoreForMax = "X";
           otherBallScore = "X";
           storedFrameScore = "10";
         } else {
@@ -160,7 +162,7 @@ const MainHomePage = () => {
         if (score == "/") {
           var maxScore = (10 - parseInt(id)) * 30 + 20;
           setMaxScoreState(maxScore);
-        } else if (score != "X") {
+        } else if (scoreForMax != "X") {
           var maxScore = (10 - parseInt(id)) * 30 + parseInt(storedFrameScore);
           setMaxScoreState(maxScore);
         }
@@ -1196,9 +1198,13 @@ const MainHomePage = () => {
     <div className="main-container">
       <div className="header">
         <h2>
-          Welcome. Learn how to maximise your bowling score here with our
-          interactive bowling score calculator.
+          Learn how to maximise your bowling score with our interactive bowling
+          score calculator!
         </h2>
+        <h3>
+          Simply input your scores into the frames below! Remember "X" for
+          strikes and "/" for spares!
+        </h3>
       </div>
       <div className="bowling-frames">
         <div className="indiv-frame">
@@ -1212,6 +1218,7 @@ const MainHomePage = () => {
             >
               <div className="frameNoBox">
                 <Button
+                  sx={{ color: "black" }}
                   variant="text"
                   onClick={() => highlightCurrFrame(frame.key)}
                 >
@@ -1253,7 +1260,11 @@ const MainHomePage = () => {
             key={10}
           >
             <div className="frameNoBox">
-              <Button variant="text" onClick={() => highlightCurrFrame(10)}>
+              <Button
+                sx={{ color: "black" }}
+                variant="text"
+                onClick={() => highlightCurrFrame(10)}
+              >
                 Frame 10
               </Button>
             </div>
@@ -1296,7 +1307,7 @@ const MainHomePage = () => {
             <div className="HandicapBox">Handicap</div>
           </div> */}
           <div className="frameBox" id="fnoMAX">
-            <div className="frameNoBox">Max Score</div>
+            <div className="frameNoBox">MAX SCORE</div>
             <div className="MaxScoreBox">{calculateMaxScore()}</div>
           </div>
         </div>
