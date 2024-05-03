@@ -8,12 +8,12 @@ const Sidebar = () => {
   return (
     <>
       <div className="sidebar">
-        <ul>
+        <ul className="list-inline">
           {SidebarData.map((item, key) => {
             return (
-              <li key={key}>
-                <Link to={item.link}>
-                  <span>{item.title}</span>
+              <li key={key} className="list-inline-item">
+                <Link className="sidebar-links" to={item.link}>
+                  <div>{item.title}</div>
                 </Link>
               </li>
             );

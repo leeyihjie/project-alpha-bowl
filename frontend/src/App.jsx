@@ -1,5 +1,8 @@
 import React from "react";
 import "./App.css";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 import WelcomePage from "./pages/WelcomePage";

@@ -1196,15 +1196,36 @@ const MainHomePage = () => {
 
   return (
     <div className="main-container">
+      <nav
+        className="navbar navbar-expand-lg navbar-dark bg-primary 
+      border-bottom border-secondary"
+      >
+        <div className="navbar-brand ms-2 mr-2 shadow-sm">
+          Project Alpha Bowl
+        </div>
+      </nav>
       <div className="header">
-        <h2>
+        <div className="pab-header">
+          <div className="pab-header-main">
+            <img
+              className="pab-image"
+              src="public/bowling-browser-icon.png"
+              alt="logo"
+            />
+            <h1 className="h1">Project Alpha Bowl</h1>
+          </div>
+          <div className="pab-header-sub">
+            <h3 className="h3">Time to level up your bowling game</h3>
+          </div>
+        </div>
+        <h3>
           Learn how to maximise your bowling score with our interactive bowling
           score calculator!
-        </h2>
-        <h3>
+        </h3>
+        <span>
           Simply input your scores into the frames below! Remember "X" for
           strikes and "/" for spares!
-        </h3>
+        </span>
       </div>
       <div className="bowling-frames">
         <div className="indiv-frame">
