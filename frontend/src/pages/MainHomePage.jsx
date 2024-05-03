@@ -103,6 +103,7 @@ const MainHomePage = () => {
       var currScore = "";
       var otherBallScore = "";
       var storedFrameScore = "";
+      var scoreForMax = "";
 
       if (name == "firstBallScore") {
         if (score > 9 || score < 0) {
@@ -112,6 +113,7 @@ const MainHomePage = () => {
         }
 
         if (score == "X" || score == "x") {
+          scoreForMax = "X";
           otherBallScore = "X";
           storedFrameScore = "10";
         } else {
@@ -160,7 +162,7 @@ const MainHomePage = () => {
         if (score == "/") {
           var maxScore = (10 - parseInt(id)) * 30 + 20;
           setMaxScoreState(maxScore);
-        } else if (score != "X") {
+        } else if (scoreForMax != "X") {
           var maxScore = (10 - parseInt(id)) * 30 + parseInt(storedFrameScore);
           setMaxScoreState(maxScore);
         }
@@ -1194,11 +1196,36 @@ const MainHomePage = () => {
 
   return (
     <div className="main-container">
+      <nav
+        className="navbar navbar-expand-lg navbar-dark bg-primary 
+      border-bottom border-secondary"
+      >
+        <div className="navbar-brand ms-2 mr-2 shadow-sm">
+          Project Alpha Bowl
+        </div>
+      </nav>
       <div className="header">
-        <h2>
-          Welcome. Learn how to maximise your bowling score here with our
-          interactive bowling score calculator.
-        </h2>
+        <div className="pab-header">
+          <div className="pab-header-main">
+            <img
+              className="pab-image"
+              src="public/bowling-browser-icon.png"
+              alt="logo"
+            />
+            <h1 className="h1">Project Alpha Bowl</h1>
+          </div>
+          <div className="pab-header-sub">
+            <h3 className="h3">Time to level up your bowling game</h3>
+          </div>
+        </div>
+        <h3>
+          Learn how to maximise your bowling score with our interactive bowling
+          score calculator!
+        </h3>
+        <span>
+          Simply input your scores into the frames below! Remember "X" for
+          strikes and "/" for spares!
+        </span>
       </div>
       <div className="bowling-frames">
         <div className="indiv-frame">
@@ -1212,6 +1239,7 @@ const MainHomePage = () => {
             >
               <div className="frameNoBox">
                 <Button
+                  sx={{ color: "black" }}
                   variant="text"
                   onClick={() => highlightCurrFrame(frame.key)}
                 >
@@ -1253,7 +1281,11 @@ const MainHomePage = () => {
             key={10}
           >
             <div className="frameNoBox">
-              <Button variant="text" onClick={() => highlightCurrFrame(10)}>
+              <Button
+                sx={{ color: "black" }}
+                variant="text"
+                onClick={() => highlightCurrFrame(10)}
+              >
                 Frame 10
               </Button>
             </div>
@@ -1296,7 +1328,7 @@ const MainHomePage = () => {
             <div className="HandicapBox">Handicap</div>
           </div> */}
           <div className="frameBox" id="fnoMAX">
-            <div className="frameNoBox">Max Score</div>
+            <div className="frameNoBox">MAX SCORE</div>
             <div className="MaxScoreBox">{calculateMaxScore()}</div>
           </div>
         </div>
