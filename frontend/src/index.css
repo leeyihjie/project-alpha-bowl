@@ -80,7 +80,7 @@ button {
 }
 
 .bowling-frames {
-  height: 20%;
+  max-height: 50%;
   width: 100%;
 }
 
