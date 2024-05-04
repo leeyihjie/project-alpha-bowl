@@ -10,6 +10,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
 import MainHomePage from "./pages/MainHomePage";
+import CalculatorPage from "./pages/CalculatorPage";
 
 import Sidebar from "./Components/Sidebar";
 
@@ -27,6 +28,7 @@ function App() {
 
             {/* Protected Routes */}
             <Route path="/home" element={<MainHomePage />}></Route>
+            <Route path="/calculator" element={<CalculatorPage />}></Route>
           </Routes>
         </div>
       </BrowserRouter>
