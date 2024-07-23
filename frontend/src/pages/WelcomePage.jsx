@@ -5,7 +5,7 @@ import "../index.css";
 
 const WelcomePage = () => {
   return (
-    <div className="MainContainer">
+    <div className="WelcomeMainContainer">
       <div className="TopBar">
         <h1 className="MainHeader">Welcome to Project Alpha Bowl</h1>
         <p>

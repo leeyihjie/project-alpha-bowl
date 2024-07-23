@@ -18,7 +18,42 @@ code {
     monospace;
 }
 
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+/* SideBar CSS */
+
+.sidebar {
+  /* position:   ; */
+  height: 100%;
+  width: 15%;
+  background-color: white;
+  display: flex;
+  justify-content: start;
+  /* border-right: 2px solid black; */
+}
+
+.sidebar-links {
+  text-decoration: none;
+}
+
+/* Welcome Page CSS (Login and Register Options) */
+
+.WelcomeMainContainer {
+  width: 85%;
+}
+
+/* HomepageMainContainer CSS (After Login) */
+
+.HomepageMainContainer {
+  width: 85%;
+}
+
 .MainContainer {
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -62,26 +97,30 @@ button {
 
 /* Main Home Page CSS ( Score Calulator) */
 
-#root {
+.main-cal-container {
   height: 100%;
-  width: 100%;
-}
-
-.main-container {
-  height: 100%;
-  width: 100%;
+  width: 85%;
   margin: 0;
 }
 
-.header {
+/* .header {
   margin: 0;
   height: 30%;
   width: 100%;
-}
+} */
 
 .bowling-frames {
-  max-height: 50%;
+  height: 40%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.indiv-frame-container {
+  height: 45%;
+  margin: 0 8px 0 8px;
 }
 
 .indiv-frame {
@@ -209,25 +248,9 @@ Button {
   color: black;
 }
 
-/* SideBar CSS */
-
-.sidebar {
-  position: relative;
-  height: 100%;
-  max-width: 10%;
-  background-color: white;
-  display: flex;
-  justify-content: start;
-  border-right: 2px solid black;
-}
-
-.sidebar-links {
-  text-decoration: none;
-}
-
 /* Header CSS */
 .pab-header {
-  height: 100%;
+  height: 20%;
   width: 100%;
 }
 
@@ -240,10 +263,17 @@ Button {
 }
 
 .pab-header-sub {
+  height: 60%;
   text-align: center;
 }
 
 .pab-image {
   max-height: 100%;
   max-width: 100%;
+}
+
+/* Calculator Screen */
+.cal-image {
+  max-height: 75%;
+  max-width: 75%;
 }

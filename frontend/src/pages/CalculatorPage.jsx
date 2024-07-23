@@ -80,6 +80,7 @@ const CalculatorPage = () => {
     },
   ]);
 
+  // Single useState hook to update input values as an obj for special frames 10
   const [scoreState10, setScoreState10] = useState({
     key: 10,
     text: "Frame 10",
@@ -90,6 +91,7 @@ const CalculatorPage = () => {
     gameTotalScore: "",
   });
 
+  // Set default max score state value to max score for a single bowling game (300)
   const [maxScoreState, setMaxScoreState] = useState(300);
 
   // Function to update values for individual mapped frame states
@@ -1179,8 +1181,7 @@ const CalculatorPage = () => {
   // State for Currently Selected Frame
   const [isActive, setIsActive] = useState("");
 
-  // Function to Update Current Frame Number on Click and Highlight
-  // Current State
+  // Function to Update Current Frame Number on Click and Highlight Current State
   const highlightCurrFrame = (frameid) => {
     // set currFrameNo to currently selected Frame
     setIsActive(frameid);
@@ -1195,7 +1196,7 @@ const CalculatorPage = () => {
   };
 
   return (
-    <div className="main-container">
+    <div className="main-cal-container">
       <nav
         className="navbar navbar-expand-lg navbar-dark bg-primary 
       border-bottom border-secondary"
@@ -1204,126 +1205,157 @@ const CalculatorPage = () => {
           Project Alpha Bowl
         </div>
       </nav>
-      <div className="header">
-        <div className="pab-header">
-          <div className="pab-header-main">
-            <h1 className="h1">Bowling Score Calculator</h1>
-          </div>
-          <h3>
-            Learn how to maximise your bowling score with our interactive
-            bowling score calculator!
+      {/* <div className="header"> */}
+      <div className="pab-header">
+        <div className="pab-header-main">
+          <img
+            className="cal-image"
+            src="public/ScoreCalculator.png"
+            alt="logo"
+          />
+          <h1 className="h1">Bowling Score Calculator</h1>
+        </div>
+        <div className="pab-header-sub">
+          <h3 className="text-center">
+            Maximise your bowling score with our interactive bowling score
+            calculator!
           </h3>
-          <span>
-            Simply input your scores into the frames below! Remember "X" for
-            strikes and "/" for spares!
-          </span>
         </div>
       </div>
+      {/* </div> */}
       <div className="bowling-frames">
-        <div className="indiv-frame">
-          {scoreState.map((frame, index) => (
+        <p className="text-center">
+          Simply input your scores into the frames below! Remember "X" for
+          strikes and "/" for spares!
+        </p>
+        <div className="indiv-frame-container">
+          <div className="indiv-frame">
+            {scoreState.map((frame, index) => (
+              <div
+                className={
+                  "frameBox " +
+                  (isActive === frame.key
+                    ? "activeFrameBox"
+                    : "inactiveFrameBox")
+                }
+                key={frame.key}
+              >
+                <div className="frameNoBox">
+                  <Button
+                    sx={{ color: "black" }}
+                    variant="text"
+                    onClick={() => highlightCurrFrame(frame.key)}
+                  >
+                    {frame.text}
+                  </Button>
+                </div>
+                <div className="middleScoreBox">
+                  <div className="indiv-scores firstBall">
+                    <input
+                      className="inputScores"
+                      type="text"
+                      name="firstBallScore"
+                      id={frame.key}
+                      value={frame.firstBallScore}
+                      onChange={(e) => updateFrameStates(e, index)}
+                    ></input>
+                  </div>
+                  <div className="indiv-scores">
+                    <input
+                      className="inputScores"
+                      type="text"
+                      name="secondBallScore"
+                      id={frame.key}
+                      value={frame.secondBallScore}
+                      onChange={(e) => updateFrameStates(e, index)}
+                    ></input>
+                  </div>
+                </div>
+                <div className="totalFrameScoreBox">
+                  {updateTotalScore(index)}
+                </div>
+              </div>
+            ))}
             <div
               className={
-                "frameBox " +
-                (isActive === frame.key ? "activeFrameBox" : "inactiveFrameBox")
+                "frameBox10 " +
+                (isActive === 10 ? "activeFrameBox" : "inactiveFrameBox")
               }
-              key={frame.key}
+              key={10}
             >
               <div className="frameNoBox">
                 <Button
                   sx={{ color: "black" }}
                   variant="text"
-                  onClick={() => highlightCurrFrame(frame.key)}
+                  onClick={() => highlightCurrFrame(10)}
                 >
-                  {frame.text}
+                  Frame 10
                 </Button>
               </div>
               <div className="middleScoreBox">
-                <div className="indiv-scores firstBall">
+                <div className="indiv-scores10 firstBall">
                   <input
-                    className="inputScores"
+                    className="inputScores10"
                     type="text"
                     name="firstBallScore"
-                    id={frame.key}
-                    value={frame.firstBallScore}
-                    onChange={(e) => updateFrameStates(e, index)}
+                    id={10}
+                    value={scoreState10.firstBallScore}
+                    onChange={(e) => updateFrameStates10(e)}
                   ></input>
                 </div>
-                <div className="indiv-scores">
+                <div className="indiv-scores10 secondBall">
                   <input
-                    className="inputScores"
+                    className="inputScores10"
                     type="text"
                     name="secondBallScore"
-                    id={frame.key}
-                    value={frame.secondBallScore}
-                    onChange={(e) => updateFrameStates(e, index)}
+                    id={10}
+                    value={scoreState10.secondBallScore}
+                    onChange={(e) => updateFrameStates10(e)}
+                  ></input>
+                </div>
+                <div className="indiv-scores10  ">
+                  <input
+                    className="inputScores10"
+                    type="text"
+                    name="thirdBallScore"
+                    id={10}
+                    value={scoreState10.thirdBallScore}
+                    onChange={(e) => updateFrameStates10(e)}
                   ></input>
                 </div>
               </div>
-              <div className="totalFrameScoreBox">
-                {updateTotalScore(index)}
-              </div>
+              <div className="totalFrameScoreBox">{updateTotalScore10()}</div>
             </div>
-          ))}
-          <div
-            className={
-              "frameBox10 " +
-              (isActive === 10 ? "activeFrameBox" : "inactiveFrameBox")
-            }
-            key={10}
-          >
-            <div className="frameNoBox">
-              <Button
-                sx={{ color: "black" }}
-                variant="text"
-                onClick={() => highlightCurrFrame(10)}
-              >
-                Frame 10
-              </Button>
-            </div>
-            <div className="middleScoreBox">
-              <div className="indiv-scores10 firstBall">
-                <input
-                  className="inputScores10"
-                  type="text"
-                  name="firstBallScore"
-                  id={10}
-                  value={scoreState10.firstBallScore}
-                  onChange={(e) => updateFrameStates10(e)}
-                ></input>
-              </div>
-              <div className="indiv-scores10 secondBall">
-                <input
-                  className="inputScores10"
-                  type="text"
-                  name="secondBallScore"
-                  id={10}
-                  value={scoreState10.secondBallScore}
-                  onChange={(e) => updateFrameStates10(e)}
-                ></input>
-              </div>
-              <div className="indiv-scores10  ">
-                <input
-                  className="inputScores10"
-                  type="text"
-                  name="thirdBallScore"
-                  id={10}
-                  value={scoreState10.thirdBallScore}
-                  onChange={(e) => updateFrameStates10(e)}
-                ></input>
-              </div>
-            </div>
-            <div className="totalFrameScoreBox">{updateTotalScore10()}</div>
-          </div>
-          {/* <div className="frameBox" id="fnoHCP">
+            {/* <div className="frameBox" id="fnoHCP">
             <div className="frameNoBox">Handicap</div>
             <div className="HandicapBox">Handicap</div>
           </div> */}
-          <div className="frameBox" id="fnoMAX">
-            <div className="frameNoBox">MAX SCORE</div>
-            <div className="MaxScoreBox">{calculateMaxScore()}</div>
+            <div className="frameBox" id="fnoMAX">
+              <div className="frameNoBox">MAX SCORE</div>
+              <div className="MaxScoreBox">{calculateMaxScore()}</div>
+            </div>
           </div>
         </div>
+        <p className="text-uppercase fst-italic">
+          /* Scroll down for a more comprehensive explanation for how the
+          bowling scoring system works */
+        </p>
+      </div>
+      <div className="scoring-explanation">
+        <p>
+          The goal of bowling is simple – to knock down as many pins as
+          possible. The more pins you knock down, the more points you score. A
+          single game consists of 10 “frames”, with each frame consisting of two
+          chances to knock down ten pins (with the exception of the last frame).
+          Each pin you knock down earns you a point, while you can also score
+          extra points by hitting “strikes” or “spares”. Most bowling alleys
+          today come with a computerised system that automatically calculates
+          your score for you. However, in the past, bowlers had to record their
+          score on a piece of paper and calculate it on their own. Today, some
+          bowlers still prefer to write their score on paper, be it to keep
+          track of their progress or in the event that the computer system
+          breaks down.
+        </p>
       </div>
     </div>
   );

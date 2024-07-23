@@ -8,10 +8,10 @@ const Sidebar = () => {
   return (
     <>
       <div className="sidebar">
-        <ul className="list-inline">
+        <ul className="list-unstyled text-center">
           {SidebarData.map((item, key) => {
             return (
-              <li key={key} className="list-inline-item">
+              <li key={key} className="list-item">
                 <Link className="sidebar-links" to={item.link}>
                   <div>{item.title}</div>
                 </Link>
