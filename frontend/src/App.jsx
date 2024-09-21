@@ -13,23 +13,27 @@ import MainHomePage from "./pages/MainHomePage";
 import CalculatorPage from "./pages/CalculatorPage";
 
 import Sidebar from "./Components/Sidebar";
+import Footer from "./Components/Footer";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <div className="bigapp">
-          <Sidebar />
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<WelcomePage />}></Route>
-            <Route path="/login" element={<LoginPage />}></Route>
-            <Route path="/register" element={<RegisterPage />}></Route>
+        <div className="MainAppContainer">
+          <div className="bigapp">
+            <Sidebar />
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<WelcomePage />}></Route>
+              <Route path="/login" element={<LoginPage />}></Route>
+              <Route path="/register" element={<RegisterPage />}></Route>
 
-            {/* Protected Routes */}
-            <Route path="/home" element={<MainHomePage />}></Route>
-            <Route path="/calculator" element={<CalculatorPage />}></Route>
-          </Routes>
+              {/* Protected Routes */}
+              <Route path="/home" element={<MainHomePage />}></Route>
+              <Route path="/calculator" element={<CalculatorPage />}></Route>
+            </Routes>
+          </div>
+          <Footer />
         </div>
       </BrowserRouter>
     </>

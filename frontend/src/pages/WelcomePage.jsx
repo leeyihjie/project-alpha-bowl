@@ -21,14 +21,14 @@ const WelcomePage = () => {
           <button>Register</button>
         </Link>
       </div>
-      <div className="Footer">
+      {/* <div className="Footer">
         <div>
           Copyright ©
           <a className="lyj" href="https://github.com/leeyihjie">
             Lee Yih Jie
           </a>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
