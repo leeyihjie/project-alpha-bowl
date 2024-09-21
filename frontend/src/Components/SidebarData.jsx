@@ -9,4 +9,8 @@ export const SidebarData = [
     title: "Home",
     link: "/home",
   },
+  {
+    title: "Score Calculator",
+    link: "/calculator",
+  },
 ];

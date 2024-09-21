@@ -5,7 +5,7 @@ import "../index.css";
 
 const WelcomePage = () => {
   return (
-    <div className="MainContainer">
+    <div className="WelcomeMainContainer">
       <div className="TopBar">
         <h1 className="MainHeader">Welcome to Project Alpha Bowl</h1>
         <p>
@@ -21,14 +21,14 @@ const WelcomePage = () => {
           <button>Register</button>
         </Link>
       </div>
-      <div className="Footer">
+      {/* <div className="Footer">
         <div>
           Copyright ©
           <a className="lyj" href="https://github.com/leeyihjie">
             Lee Yih Jie
           </a>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
