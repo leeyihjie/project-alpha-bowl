@@ -114,6 +114,7 @@ const CalculatorPage = () => {
           );
         }
 
+        // TODO: convert user input to uppercase, reduce checking if condition
         if (score == "X" || score == "x") {
           scoreForMax = "X";
           otherBallScore = "X";
@@ -1357,7 +1358,7 @@ const CalculatorPage = () => {
           breaks down.
         </p>
         <p>
-          The game consists of 10 frames. In general, each frame has 2 rolls.
+          The xgame consists of 10 frames. In general, each frame has 2 rolls.
           Strikes The player has a strike if he knocks down all 10 pins with the
           first roll in a frame. The frame ends immediately (since there are no
           pins left for a second roll). The bonus for that frame is the number

@@ -1,3 +1,13 @@
+/* CSS for index.jsx file */
+/* i.e. Only Containing: Top-level ROOT element */
+
+#root {
+  min-height: 100%;
+  width: 100%;
+}
+
+/* Main document CSS */
+
 html {
   height: 100%;
 }
@@ -16,11 +26,6 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-}
-
-#root {
-  height: 100%;
-  width: 100%;
 }
 
 /* SideBar CSS */
@@ -274,7 +279,7 @@ Button {
   max-width: 100%;
 }
 
-/* Calculator Screen */
+/* Calculator Screen (NEW ARRANGEMENT) */
 .cal-image {
   max-height: 75%;
   max-width: 75%;

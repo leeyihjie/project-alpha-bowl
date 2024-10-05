@@ -10,7 +10,7 @@ const MainHomePage = () => {
         className="navbar navbar-expand-lg navbar-dark bg-primary 
       border-bottom border-secondary"
       >
-        <a className="navbar-brand ms-2 mr-2 shadow-sm">
+        <a className="navbar-brand ms-2 mr-2 shadow-sm" href="/">
           <img
             src="public/bowling-browser-icon.png"
             alt=""

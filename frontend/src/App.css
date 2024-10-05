@@ -37,6 +37,11 @@
   }
 }
 
+/* CSS for created components */
+
+.MainWebpageContainer {
+}
+
 .bigapp {
   display: flex;
   width: 100%;
