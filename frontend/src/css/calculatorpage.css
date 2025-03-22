@@ -1,0 +1,40 @@
+/* Main Home Page CSS ( Score Calulator) */
+
+.main-cal-container {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+
+  font-family: "Roboto";
+}
+
+.main-cal-container .pab-header-main {
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0 10px 0;
+}
+.main-cal-container .cal-image {
+  max-height: 6%;
+  max-width: 6%;
+}
+.main-cal-container .header-main-text {
+  max-height: 1%;
+  max-width: 92%;
+  margin: 0;
+
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.main-cal-container .pab-header-sub {
+  padding: 10px 0 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main-cal-container .header-sub-text {
+  margin: 0;
+  font-size: large;
+}

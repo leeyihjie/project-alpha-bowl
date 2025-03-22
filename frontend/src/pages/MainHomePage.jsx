@@ -6,21 +6,6 @@ import { ScrollRestoration } from "react-router-dom";
 const MainHomePage = () => {
   return (
     <div className="HomepageMainContainer">
-      <nav
-        className="navbar navbar-expand-lg navbar-dark bg-primary 
-      border-bottom border-secondary"
-      >
-        <a className="navbar-brand ms-2 mr-2 shadow-sm" href="/">
-          <img
-            src="public/bowling-browser-icon.png"
-            alt=""
-            width="30"
-            height="24"
-            className="d-inline-block align-text-top"
-          />
-          Project Alpha Bowl
-        </a>
-      </nav>
       <div className="header">
         <div className="pab-header">
           <div className="pab-header-sub">

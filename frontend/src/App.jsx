@@ -24,9 +24,9 @@ function App() {
     <>
       <BrowserRouter>
         <Header />
-        <div className="MainWebpageContainer">
-          <div className="bigapp">
-            <Sidebar />
+        <div className="BodyContainer">
+          <Sidebar />
+          <div className="BodyContent">
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<WelcomePage />}></Route>
@@ -38,8 +38,8 @@ function App() {
               <Route path="/calculator" element={<CalculatorPage />}></Route>
             </Routes>
           </div>
-          <Footer />
         </div>
+        <Footer />
       </BrowserRouter>
     </>
   );

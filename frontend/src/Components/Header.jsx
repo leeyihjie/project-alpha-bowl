@@ -1,15 +1,12 @@
 import React from "react";
-import "../css/global.css";
+import "../css/header.css";
 
 const Header = () => {
   return (
     <>
       <div className="header">
-        <nav
-          className="navbar navbar-expand-lg navbar-dark bg-primary 
-      border-bottom border-secondary"
-        >
-          <a className="navbar-brand ms-2 mr-2" href="/">
+        <nav className="navbar navbar-expand-md">
+          <a className="navbar-brand ms-2 mr-2" href="/home">
             <img
               src="public/bowling-browser-icon.png"
               alt=""

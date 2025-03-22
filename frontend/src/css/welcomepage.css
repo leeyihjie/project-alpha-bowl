@@ -1,0 +1,22 @@
+/* Welcome Page CSS (Login and Register Options) */
+
+.WelcomeMainContainer {
+  width: 100%;
+}
+
+.WelcomeMainContainer .TopBar {
+  border: 2px solid blue;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.WelcomeMainContainer .TopBar .MainHeader {
+  text-decoration: underline;
+  margin-bottom: 5px;
+}
+
+.WelcomeMainContainer .TopBar .SubHeader {
+  margin-bottom: 0px;
+}
