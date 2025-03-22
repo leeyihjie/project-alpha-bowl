@@ -2,16 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import "../index.css";
+import "../css/welcomepage.css";
 
 const WelcomePage = () => {
   return (
     <div className="WelcomeMainContainer">
       <div className="TopBar">
-        <h1 className="MainHeader">Welcome to Project Alpha Bowl</h1>
-        <p>
-          The one stop place to improve your your bowling scores and hit the
-          esteemed 300.
-        </p>
+        <h1 className="MainHeader">Welcome</h1>
+        <p className="SubHeader">Unlock your full potential here</p>
       </div>
       <div className="WelcomeBody">
         <Link to="/login">
@@ -21,14 +19,6 @@ const WelcomePage = () => {
           <button>Register</button>
         </Link>
       </div>
-      {/* <div className="Footer">
-        <div>
-          Copyright ©
-          <a className="lyj" href="https://github.com/leeyihjie">
-            Lee Yih Jie
-          </a>
-        </div>
-      </div> */}
     </div>
   );
 };

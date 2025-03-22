@@ -3,6 +3,8 @@ import { Box, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import { ScrollRestoration } from "react-router-dom";
 
+import "../css/calculatorpage.css";
+
 const CalculatorPage = () => {
   // Single useState hook to update input values as an obj for frames 1-9
   const [scoreState, setScoreState] = useState([
@@ -114,6 +116,7 @@ const CalculatorPage = () => {
           );
         }
 
+        // TODO: convert user input to uppercase, reduce checking if condition
         if (score == "X" || score == "x") {
           scoreForMax = "X";
           otherBallScore = "X";
@@ -1197,15 +1200,6 @@ const CalculatorPage = () => {
 
   return (
     <div className="main-cal-container">
-      <nav
-        className="navbar navbar-expand-lg navbar-dark bg-primary 
-      border-bottom border-secondary"
-      >
-        <div className="navbar-brand ms-2 mr-2 shadow-sm">
-          Project Alpha Bowl
-        </div>
-      </nav>
-      {/* <div className="header"> */}
       <div className="pab-header">
         <div className="pab-header-main">
           <img
@@ -1213,16 +1207,15 @@ const CalculatorPage = () => {
             src="public/ScoreCalculator.png"
             alt="logo"
           />
-          <h1 className="h1">Bowling Score Calculator</h1>
+          <h1 className="header-main-text">Bowling Score Calculator</h1>
         </div>
         <div className="pab-header-sub">
-          <h3 className="text-center">
-            Maximise your bowling score with our interactive bowling score
-            calculator!
+          <h3 className="header-sub-text">
+            Ever wanted to learn how scoring in bowling works? Now you can with
+            our interactive score calculator
           </h3>
         </div>
       </div>
-      {/* </div> */}
       <div className="bowling-frames">
         <p className="text-center">
           Simply input your scores into the frames below! Remember "X" for
@@ -1357,7 +1350,7 @@ const CalculatorPage = () => {
           breaks down.
         </p>
         <p>
-          The game consists of 10 frames. In general, each frame has 2 rolls.
+          The xgame consists of 10 frames. In general, each frame has 2 rolls.
           Strikes The player has a strike if he knocks down all 10 pins with the
           first roll in a frame. The frame ends immediately (since there are no
           pins left for a second roll). The bonus for that frame is the number

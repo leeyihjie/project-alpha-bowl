@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../index.css";
+
+// Importing CSS From Global File
+import "../css/sidebar.css";
 
 import { SidebarData } from "./SidebarData";
 
@@ -8,17 +10,19 @@ const Sidebar = () => {
   return (
     <>
       <div className="sidebar">
-        <ul className="list-unstyled text-center">
-          {SidebarData.map((item, key) => {
-            return (
-              <li key={key} className="list-item">
-                <Link className="sidebar-links" to={item.link}>
-                  <div>{item.title}</div>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <nav>
+          <ul>
+            {SidebarData.map((item, key) => {
+              return (
+                <li key={key} className="list-item">
+                  <Link className="sidebar-links" to={item.link}>
+                    <div>{item.title}</div>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
       </div>
     </>
   );

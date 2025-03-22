@@ -2,15 +2,15 @@ import React from "react";
 
 export const SidebarData = [
   {
-    title: "Welcome",
+    title: "Welcome Screen",
     link: "/",
   },
   {
-    title: "Home",
+    title: "Home Screen",
     link: "/home",
   },
   {
-    title: "Score Calculator",
+    title: "Score Calculator Screen",
     link: "/calculator",
   },
 ];
